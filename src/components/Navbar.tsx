@@ -4,7 +4,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
 import AIAssistantDrawer from './AIAssistantDrawer';
+
+const links = [
+  { href: '/', label: 'Ana Sayfa' },
+  { href: '/tedaviler', label: 'Tedaviler' },
+  { href: '/ozgecmis', label: 'Özgeçmiş' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/contact', label: 'İletişim' },
+];
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -14,190 +23,110 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 20);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isActivePath = (path: string) => {
-    return pathname === path;
-  };
+  const isActivePath = (path: string) => pathname === path;
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white text-gray-800 shadow-md py-3' : 'bg-gradient-to-r from-blue-600 to-blue-500 text-white py-5'}`}>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 bg-cream/90 backdrop-blur-md border-b border-ink/5 transition-all duration-300 ${
+          scrolled ? 'py-3 shadow-sm' : 'py-4'
+        }`}
+      >
         <div className="container mx-auto px-4 md:px-8">
           <div className="flex justify-between items-center">
-            <Link href="/" className={`text-xl md:text-2xl font-bold transition-colors duration-300 ${scrolled ? 'text-blue-600' : 'text-white'}`}>
-              <span className="flex items-center">
-                <Image 
-                  src="/logonew.png" 
-                  alt="Dt. Ömer Özdemir Logo" 
-                  width={100} 
-                  height={100} 
-                  className="mr-2"
-                />
-                Dt. Ömer Özdemir
-              </span>
+            <Link href="/" className="flex items-center gap-2">
+              <Image
+                src="/logonew.png"
+                alt="Dr. Ömer Özdemir Logo"
+                width={36}
+                height={36}
+                className="rounded-full object-cover"
+              />
+              <span className="font-serif text-lg text-ink">Dr. Ömer Özdemir</span>
             </Link>
 
             {/* Mobile menu button */}
             <div className="md:hidden">
-              <button 
+              <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className={`focus:outline-none transition-colors duration-300 ${scrolled ? 'text-blue-600' : 'text-white'}`}
+                className="text-ink focus:outline-none"
+                aria-label="Menüyü aç/kapat"
               >
-                {mobileMenuOpen ? (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                  </svg>
-                ) : (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                  </svg>
-                )}
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              <Link 
-                href="/" 
-                className={`font-medium text-base relative py-2 transition-colors duration-300 hover:text-blue-300 ${
-                  isActivePath('/') 
-                    ? scrolled 
-                      ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600' 
-                      : 'text-white after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-white' 
-                    : scrolled 
-                      ? 'text-gray-700' 
-                      : 'text-white'
-                }`}
-              >
-                Ana Sayfa
-              </Link>
-              <Link 
-                href="/tedaviler" 
-                className={`font-medium text-base relative py-2 transition-colors duration-300 hover:text-blue-300 ${
-                  isActivePath('/tedaviler') 
-                    ? scrolled 
-                      ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600' 
-                      : 'text-white after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-white' 
-                    : scrolled 
-                      ? 'text-gray-700' 
-                      : 'text-white'
-                }`}
-              >
-                Tedaviler
-              </Link>
-              <Link 
-                href="/ozgecmis" 
-                className={`font-medium text-base relative py-2 transition-colors duration-300 hover:text-blue-300 ${
-                  isActivePath('/ozgecmis') 
-                    ? scrolled 
-                      ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600' 
-                      : 'text-white after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-white' 
-                    : scrolled 
-                      ? 'text-gray-700' 
-                      : 'text-white'
-                }`}
-              >
-                Özgeçmiş
-              </Link>
-              <Link 
-                href="/contact" 
-                className={`font-medium text-base relative py-2 transition-colors duration-300 hover:text-blue-300 ${
-                  isActivePath('/contact') 
-                    ? scrolled 
-                      ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600' 
-                      : 'text-white after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-white' 
-                    : scrolled 
-                      ? 'text-gray-700' 
-                      : 'text-white'
-                }`}
-              >
-                İletişim
-              </Link>
-              <button 
+            <div className="hidden md:flex items-center gap-8">
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`text-sm font-medium transition-colors duration-200 ${
+                    isActivePath(link.href) ? 'text-mint' : 'text-ink-soft hover:text-ink'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <button
                 onClick={() => setDrawerOpen(true)}
-                className={`ml-4 px-5 py-2 rounded-full transition-all duration-300 ${
-                  scrolled 
-                    ? 'bg-blue-600 text-white hover:bg-blue-700' 
-                    : 'bg-white text-blue-600 hover:bg-blue-50'
-                }`}
+                className="ml-2 flex items-center gap-2 rounded-md bg-ink pl-2 pr-5 py-2 text-sm font-medium text-cream transition-colors duration-200 hover:bg-mint"
               >
-                <span className="flex items-center">
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                  </svg>
-                  AI Assistant
+                <span className="relative w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
+                  <Image src="/Arise.jpg" alt="" fill style={{ objectFit: 'cover' }} />
                 </span>
+                AI Asistan
               </button>
             </div>
           </div>
 
           {/* Mobile Navigation */}
-          <div className={`md:hidden transition-all duration-300 overflow-hidden ${mobileMenuOpen ? 'max-h-60 mt-4' : 'max-h-0'}`}>
-            <div className={`flex flex-col space-y-3 py-3 ${scrolled ? 'text-gray-700' : 'text-white'}`}>
-              <Link 
-                href="/" 
-                className={`font-medium py-2 px-3 rounded-md ${isActivePath('/') ? 'bg-blue-700 text-white' : 'hover:bg-blue-600/10'}`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Ana Sayfa
-              </Link>
-              <Link 
-                href="/tedaviler" 
-                className={`font-medium py-2 px-3 rounded-md ${isActivePath('/tedaviler') ? 'bg-blue-700 text-white' : 'hover:bg-blue-600/10'}`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Tedaviler
-              </Link>
-              <Link 
-                href="/ozgecmis" 
-                className={`font-medium py-2 px-3 rounded-md ${isActivePath('/ozgecmis') ? 'bg-blue-700 text-white' : 'hover:bg-blue-600/10'}`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Özgeçmiş
-              </Link>
-              <Link 
-                href="/contact" 
-                className={`font-medium py-2 px-3 rounded-md ${isActivePath('/contact') ? 'bg-blue-700 text-white' : 'hover:bg-blue-600/10'}`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                İletişim
-              </Link>
-              <button 
+          <div
+            className={`md:hidden transition-all duration-300 overflow-hidden ${
+              mobileMenuOpen ? 'max-h-72 mt-4' : 'max-h-0'
+            }`}
+          >
+            <div className="flex flex-col gap-1 py-3 text-ink">
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`text-sm font-medium py-2 px-3 rounded-lg ${
+                    isActivePath(link.href) ? 'bg-mint-light text-mint' : 'hover:bg-ink/5'
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   setDrawerOpen(true);
                 }}
-                className={`font-medium py-2 px-3 rounded-md flex items-center ${
-                  scrolled ? 'bg-blue-600 text-white' : 'bg-white text-blue-600'
-                }`}
+                className="mt-1 flex items-center gap-2 rounded-lg bg-ink px-3 py-2 text-sm font-medium text-cream"
               >
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                </svg>
-                AI Assistant
+                <span className="relative w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
+                  <Image src="/Arise.jpg" alt="" fill style={{ objectFit: 'cover' }} />
+                </span>
+                AI Asistan
               </button>
             </div>
           </div>
         </div>
       </nav>
-      
-      {/* AI Asistan Drawer */}
-      <AIAssistantDrawer 
-        isOpen={drawerOpen} 
-        onClose={() => setDrawerOpen(false)} 
-      />
+
+      <AIAssistantDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </>
   );
 };
 
-export default Navbar; 
+export default Navbar;

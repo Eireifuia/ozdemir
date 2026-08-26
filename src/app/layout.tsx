@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,9 +12,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
+});
+
 export const metadata: Metadata = {
-  title: "Dt. Ömer Özdemir | Çocuk Diş Kliniği",
-  description: "Dt. Ömer Özdemir ile çocuklarınız için özel pedodonti (çocuk diş hekimliği) hizmetleri. Dijital diş hekimliği ve yapay zeka destekli modern yaklaşım.",
+  title: "Dr. Ömer Özdemir | Çocuk Diş Kliniği",
+  description: "Dr. Ömer Özdemir ile çocuklarınız için özel pedodonti (çocuk diş hekimliği) hizmetleri. Dijital diş hekimliği ve yapay zeka destekli modern yaklaşım.",
 };
 
 export default function RootLayout({
@@ -25,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} font-sans antialiased`}
       >
         <div className="pt-24 md:pt-28">
           {children}
