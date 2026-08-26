@@ -119,24 +119,8 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Personal note */}
-        <section className="bg-cream-alt">
-          <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20">
-            <div className="max-w-2xl">
-              <Eyebrow>Bir Not</Eyebrow>
-              <p className="font-serif text-xl md:text-2xl text-ink leading-relaxed mb-4">
-                Burası hem kliniğim hem de benim kişisel köşem. Diş hekimliğinin dışında kalan
-                tarafımı da buradan takip edebilirsin.
-              </p>
-              <Link href="/ozgecmis" className="text-sm font-medium text-mint hover:text-ink transition-colors">
-                Hikayem →
-              </Link>
-            </div>
-          </div>
-        </section>
-
         {/* About */}
-        <section className="bg-white">
+        <section className="bg-cream-alt">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28 grid md:grid-cols-[1.3fr_1fr] gap-16">
             <div>
               <Eyebrow>Hakkımızda</Eyebrow>
@@ -146,18 +130,16 @@ export default async function Home() {
               <div className="space-y-4 max-w-xl">
                 <p className="text-ink-soft leading-relaxed">
                   Çocukların sağlıklı ve mutlu gülümsemeleri için çalışan bir çocuk diş
-                  hekimiyim. Diş tedavisini korkulan bir şey değil, eğlenceli bir deneyime
-                  dönüştürmek en sevdiğim şey!
+                  hekimi. Diş tedavisini korkulan bir şey değil, eğlenceli bir deneyime
+                  dönüştürmek en sevdiği şey.
                 </p>
                 <p className="text-ink-soft leading-relaxed">
-                  İstanbul Üniversitesi Diş Hekimliği Fakültesi&apos;nden mezun oldum. Şu anda
-                  Pedodonti (çocuk diş hekimliği) alanında doktora yapıyor ve çocuklara özel
-                  tedaviler konusunda uzmanlaşıyorum.
+                  İstanbul Üniversitesi Diş Hekimliği Fakültesi&apos;nden mezun oldu, aynı
+                  üniversitede Pedodonti (çocuk diş hekimliği) alanında doktorasını tamamladı.
                 </p>
                 <p className="text-ink-soft leading-relaxed">
-                  Bilimi, deneyimi ve çocuklarla güçlü iletişimi birleştirerek; onların diş
-                  sağlığına en konforlu, modern ve güvenli çözümleri sunmak için her gün
-                  kendimi geliştirmeye devam ediyorum.
+                  Bugüne kadar 7.000&apos;den fazla çocuğa tedavi uyguladı, araştırmalarını da
+                  Japonya&apos;daki Kyushu Üniversitesi&apos;nde sürdürdü.
                 </p>
               </div>
             </div>

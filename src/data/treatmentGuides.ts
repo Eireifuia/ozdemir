@@ -81,7 +81,7 @@ export const treatmentGuides: Guide[] = [
       ] },
       { type: 'p', text: 'Bu etkilerin derecesi, alışkanlığın süresine, sıklığına ve emme şiddetine göre değişiyor. Günde birkaç dakika, uyumadan önce emzik kullanan bir çocukla, gün boyu parmağını emen bir çocuğun etkilenme derecesi aynı değil.' },
       { type: 'h3', text: 'Peki alışkanlık nasıl bırakılır?' },
-      { type: 'p', text: 'Zorlama ve cezalandırma genelde işe yaramıyor, hatta çocuğu daha fazla strese sokup alışkanlığı pekiştirebiliyor. Daha etkili olan yaklaşımlar arasında, bırakınca ödüllendirme ve alışkanlığın tetiklendiği anları (uyku öncesi, sıkılma anları) fark edip yerine başka bir rutin koymak var. 4 yaşından sonra hâlâ devam eden ve çene gelişimini etkileyen durumlarda biz de destek olup daha planlı bir yol izleyebiliyoruz.' },
+      { type: 'p', text: 'Zorlama ve cezalandırma genelde işe yaramıyor, hatta çocuğu daha fazla strese sokup alışkanlığı pekiştirebiliyor. Daha etkili olan yaklaşımlar arasında, bırakınca ödüllendirme ve alışkanlığın tetiklendiği anları (uyku öncesi, sıkılma anları) fark edip yerine başka bir rutin koymak var. 4 yaşından sonra hala devam eden ve çene gelişimini etkileyen durumlarda biz de destek olup daha planlı bir yol izleyebiliyoruz.' },
       { type: 'p', text: 'Burada asıl mesajımız şu: bu konuda geç kalmış hissetmeyin, çoğu etki erken müdahaleyle büyük ölçüde geri dönüyor.' },
     ],
   },
@@ -160,7 +160,7 @@ export const treatmentGuides: Guide[] = [
     blocks: [
       { type: 'p', text: 'Çarpık diş ya da çene problemi deyince akla genelde ergenlik dönemindeki teller geliyor ama erken fark edilen bazı sorunlara çok daha önce, hatta süt dişleri döneminde bile basit apareylerle müdahale edebiliyoruz.' },
       { type: 'h3', text: 'Erken müdahale neden önemli?' },
-      { type: 'p', text: 'Çene, çocukluk boyunca hâlâ gelişim halinde. Bu dönemde fark edilen bir darlık ya da uyumsuzluk, hareketli ya da sabit apareylerle yönlendirilebiliyor. Bu erken müdahale iki şeyi aynı anda sağlıyor: çene gelişimini doğru yöne yönlendiriyor ve ileride gerekebilecek daha kapsamlı diş teli ihtiyacını azaltıyor.' },
+      { type: 'p', text: 'Çene, çocukluk boyunca hala gelişim halinde. Bu dönemde fark edilen bir darlık ya da uyumsuzluk, hareketli ya da sabit apareylerle yönlendirilebiliyor. Bu erken müdahale iki şeyi aynı anda sağlıyor: çene gelişimini doğru yöne yönlendiriyor ve ileride gerekebilecek daha kapsamlı diş teli ihtiyacını azaltıyor.' },
       { type: 'h3', text: 'Aparey türleri' },
       { type: 'ul', items: [
         'Hareketli apareyler: çocuğunuz tarafından takılıp çıkarılabilen, belirli saatlerde kullanılması gereken cihazlar',
@@ -196,7 +196,7 @@ export const treatmentGuides: Guide[] = [
       { type: 'p', text: 'O zaman soruyu doğrudan soralım: yarı kanal tedavisi tam olarak nedir?' },
       { type: 'p', text: 'Kısaca: dişin içindeki sinirin tamamı değil, sadece hasar görmüş üst kısmı alınıyor. Alttaki sağlıklı kısım olduğu gibi yerinde bırakılıyor. Yani "amputasyon" derken kastedilen, dişin bir parçasının kesilmesi değil, dişin içindeki hasarlı bir dokunun kısmen temizlenmesi. Bu yüzden halk arasında "yarı kanal tedavisi" ismi de kullanılıyor, kanal tedavisinin tamamı değil yarısı, üst kısmı yapılıyor çünkü.' },
       { type: 'h3', text: 'Peki bu yöntem ne zaman devreye giriyor?' },
-      { type: 'p', text: 'Her derin çürükte bu yöntem uygulanmıyor. Şu durumda tercih ediyoruz: çürük sinire ulaşacak kadar ilerlemiş ama sinirin sadece üst kısmı etkilenmiş, alt kısım hâlâ sağlıklı ve iltihaplanmamışsa yarı kanal gündeme geliyor. Bunu değerlendirmek bize düşen bir iş elbette, ama sizin bilmeniz gereken şu: bu bir "keşke tam kanal yapsaydık" durumu değil, tam tersine mümkün olan en az müdahaleyle dişi koruma çabası.' },
+      { type: 'p', text: 'Her derin çürükte bu yöntem uygulanmıyor. Şu durumda tercih ediyoruz: çürük sinire ulaşacak kadar ilerlemiş ama sinirin sadece üst kısmı etkilenmiş, alt kısım hala sağlıklı ve iltihaplanmamışsa yarı kanal gündeme geliyor. Bunu değerlendirmek bize düşen bir iş elbette, ama sizin bilmeniz gereken şu: bu bir "keşke tam kanal yapsaydık" durumu değil, tam tersine mümkün olan en az müdahaleyle dişi koruma çabası.' },
       { type: 'p', text: 'Neden en az müdahale önemli diye soracak olursanız: süt dişlerinin yapısı kalıcı dişlerden bambaşka. Tam kanal tedavisi her zaman en pratik ya da en gerekli seçenek olmuyor. Yarı kanal, uygun vakalarda hem daha basit hem daha rahat bir alternatif sunuyor, çocuğunuz için de daha kısa ve daha az yorucu bir işlem anlamına geliyor.' },
       { type: 'h3', text: 'Klasik kanal tedavisinden farkı ne?' },
       { type: 'p', text: 'İkisi de aynı amaca hizmet ediyor, diş çekilmeden ağızda kalsın diye. Ama uygulama farklı:' },
