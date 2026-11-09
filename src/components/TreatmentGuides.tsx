@@ -1,18 +1,33 @@
 "use client"
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { treatmentGuides } from '@/data/treatmentGuides';
 
 const TreatmentGuides = () => {
   const [openId, setOpenId] = useState<string | null>(null);
 
+  // Detay sayfalarından gelen #guide-id bağlantısı ilgili yazıyı açar
+  useEffect(() => {
+    const openFromHash = () => {
+      const id = window.location.hash.slice(1);
+      if (!id || !treatmentGuides.some((g) => g.id === id)) return;
+      setOpenId(id);
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    };
+    openFromHash();
+    window.addEventListener('hashchange', openFromHash);
+    return () => window.removeEventListener('hashchange', openFromHash);
+  }, []);
+
   return (
     <div className="divide-y divide-ink/10 border-t border-ink/10">
       {treatmentGuides.map((guide) => {
         const isOpen = openId === guide.id;
         return (
-          <div key={guide.id}>
+          <div key={guide.id} id={guide.id} className="scroll-mt-32">
             <button
               onClick={() => setOpenId(isOpen ? null : guide.id)}
               className="w-full flex items-center justify-between gap-6 py-5 text-left"

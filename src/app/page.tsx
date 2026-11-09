@@ -1,9 +1,24 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { Star } from 'lucide-react';
+import FadeIn from '@/components/FadeIn';
+import RevealText from '@/components/RevealText';
+import PhotoSlider from '@/components/PhotoSlider';
+import { Star, Check, ArrowRight, Sparkles, Activity, Glasses, ShieldAlert, Moon, Smile, MapPin, Phone } from 'lucide-react';
 import { getGoogleReviews, type GoogleReview } from '@/lib/googleReviews';
+import { blogPosts } from '@/data/blogPosts';
+import { clinicPhotos } from '@/data/clinicPhotos';
+import { clinics } from '@/data/clinics';
+import { siteDescription, siteTitle } from '@/data/site';
+import { siteJsonLd } from '@/lib/jsonLd';
+
+export const metadata: Metadata = {
+  title: siteTitle,
+  description: siteDescription,
+  alternates: { canonical: '/' },
+};
 
 const fallbackReviews: GoogleReview[] = [
   {
@@ -17,6 +32,63 @@ const fallbackReviews: GoogleReview[] = [
     rating: 5,
     relativeTime: 'bir yıl önce',
     text: 'İki buçuk yaşında olan oğlumuzun neredeyse tüm dişleri lekelenmişti. Ömer Tarık Hocanın ilgili ve sevecen yaklaşımı sayesinde temizlik sürecini kolayca atlattık, kendisini herkese tavsiye ediyorum.',
+  },
+];
+
+const valueProps = [
+  {
+    title: 'Çocuğa Özel Diş Hekimliği',
+    description: 'Pedodonti alanındaki akademik çalışmalar klinik pratikle birlikte yürütülüyor. Her çocuk için ayrı bir tedavi planı hazırlanıyor.',
+    href: '/hakkinda',
+  },
+  {
+    title: 'İki Yakada Klinik',
+    description: 'Avrupa Yakası\'nda Bakırköy, Anadolu Yakası\'nda Acıbadem. Hangi yakada olursanız olun, köprüyü geçmeden randevu bulunuyor.',
+    href: '/iletisim',
+  },
+  {
+    title: 'İlk Dişten Ergenliğe',
+    description: 'Bebeklikteki ilk diş de, ergenlikteki diş teli merakı da aynı kapıdan giriyor. Her yaşın derdi ayrı, yaklaşımı da ayrı.',
+    href: '/tedaviler',
+  },
+];
+
+const treatments = [
+  {
+    icon: Sparkles,
+    slug: 'cocuklarda-curuk-tedavisi',
+    title: 'Çürük Tedavisi',
+    description: 'Küçük ve yüzeysel çürüklerde koruyucu dolgu çoğu zaman yeterli oluyor. Kısa, rahat bir randevu.',
+  },
+  {
+    icon: Activity,
+    slug: 'cocuklarda-kanal-tedavisi',
+    title: 'Kanal Tedavisi',
+    description: 'Kanal tedavisi denince akla gelen korku çocuklarda geçerli değil. Doğru anestezi ile işlem hissedilmeden tamamlanıyor.',
+  },
+  {
+    icon: Glasses,
+    slug: 'vr-destekli-cocuk-dis-tedavisi',
+    title: 'VR Destekli Tedavi',
+    description: 'Meta Quest 3 gözlüğü takan çocuk bir anda başka bir dünyada. Diş hekimi koltuğu arka plana düşüyor.',
+  },
+  {
+    icon: ShieldAlert,
+    slug: 'cocuklarda-dis-travmasi',
+    title: 'Diş Travması',
+    description: 'Düşme, çarpma, kırılan ya da oynayan diş. İlk dakikalar önemli olduğu için hızlı müdahale gerekiyor.',
+  },
+  {
+    icon: Moon,
+    slug: 'cocuklarda-genel-anestezi-sedasyon',
+    title: 'Genel Anestezi / Sedasyon',
+    description: 'Çok sayıda işlem gereken ya da koltukta durmakta zorlanan küçük hastalar için güvenli ve kontrollü bir seçenek.',
+  },
+  {
+    icon: Smile,
+    slug: 'cocuklarda-erken-ortodontik-tedavi',
+    title: 'Erken Ortodontik Müdahale',
+    description: 'Bazı sorunlar süt dişi döneminde bile fark edilebiliyor. Erken bakılınca çoğu zaman basit bir apareyle çözülüyor.',
   },
 ];
 
@@ -43,13 +115,14 @@ function GoogleLogo({ className }: { className?: string }) {
   );
 }
 
-function ReviewAvatar({ src, name }: { src?: string; name: string }) {
-  if (src) {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={src} alt={name} className="w-11 h-11 rounded-full object-cover flex-shrink-0" referrerPolicy="no-referrer" />;
-  }
+// Yorumcu fotoğrafları Google sunucularından yüklenirdi; ziyaretçi verisi Google'a gitmesin diye
+// yalnızca baş harf gösterilir.
+function ReviewAvatar({ name }: { name: string }) {
   return (
-    <span className="w-11 h-11 rounded-full bg-mint-light text-mint flex items-center justify-center font-medium flex-shrink-0">
+    <span
+      aria-hidden
+      className="w-11 h-11 rounded-full bg-mint-light/40 text-mint flex items-center justify-center font-medium flex-shrink-0"
+    >
       {name.charAt(0).toUpperCase()}
     </span>
   );
@@ -64,134 +137,212 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-cream">
       <Navbar />
-      <main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd()) }} />
+      <main id="icerik">
         {/* Hero */}
         <section className="bg-ink text-cream">
-          <div className="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28">
-            <div className="max-w-2xl">
-              <Eyebrow tone="dark">Dr. Ömer Özdemir</Eyebrow>
+          <div className="max-w-6xl mx-auto px-4 md:px-8 pt-20 md:pt-28 pb-32 md:pb-40">
+            <FadeIn className="max-w-2xl">
+              <Eyebrow tone="dark">Çocuk Diş Hekimi Dr. Ömer Özdemir</Eyebrow>
               <h1 className="font-serif font-light text-5xl md:text-6xl lg:text-[4.2rem] leading-[1.05] tracking-tight mb-6">
-                Hayatı sevenler kulübü kurucu üyesi
+                <RevealText text="Çocuklar için korkusuz diş hekimliği" />
               </h1>
               <p className="text-cream/65 leading-relaxed mb-10 max-w-md">
-                Gündüzleri dişçi, geri kalan zamanda gezer, okur, yazar.
+                Diş hekimi koltuğu, çocuğunuz için korkulacak değil, merak edilecek bir yer olabilir.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link
-                  href="/contact"
-                  className="rounded-md bg-cream text-ink text-sm font-medium px-7 py-3.5 hover:bg-mint-light transition-colors"
+                  href="/iletisim"
+                  className="rounded-full bg-cream text-ink text-sm font-medium px-7 py-3.5 hover:bg-mint-light transition-colors"
                 >
-                  İletişime Geçin
+                  İletişime Geçiniz
                 </Link>
                 <Link
                   href="/tedaviler"
-                  className="rounded-md border border-cream/25 text-cream text-sm font-medium px-7 py-3.5 hover:bg-cream/10 transition-colors"
+                  className="rounded-full border border-cream/25 text-cream text-sm font-medium px-7 py-3.5 hover:bg-cream/10 transition-colors"
                 >
-                  Tedavileri İncele
+                  Tedavileri İnceleyiniz
                 </Link>
               </div>
-            </div>
+            </FadeIn>
           </div>
         </section>
 
-        {/* Journal teaser */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20">
-            <div className="flex flex-wrap items-end justify-between gap-6 mb-8">
-              <div>
-                <Eyebrow>Günlük</Eyebrow>
-                <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight">
-                  Notlardan
-                </h2>
-              </div>
-              <Link
-                href="/blog"
-                className="text-sm font-medium text-mint hover:text-ink transition-colors flex-shrink-0"
+        {/* Value props — overlapping the hero's bottom edge */}
+        <div className="relative -mt-20 md:-mt-24 px-4 md:px-8">
+          <div className="max-w-6xl mx-auto grid sm:grid-cols-3 gap-4 md:gap-6">
+            {valueProps.map((item, i) => (
+              <FadeIn
+                key={item.title}
+                delay={i * 100}
+                className="bg-white rounded-2xl shadow-lg border border-ink/5 p-6"
               >
-                Tüm Yazılar →
-              </Link>
-            </div>
-            <div className="bg-cream-alt rounded-3xl border border-ink/5 p-10 text-center">
-              <p className="text-ink-soft leading-relaxed">
-                Henüz bir yazı yok, yakında burada olacak.
-              </p>
-            </div>
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-mint-light text-mint mb-4">
+                  <Check className="w-4 h-4" />
+                </span>
+                <h3 className="font-serif text-lg text-ink mb-2 leading-snug">{item.title}</h3>
+                <p className="text-sm text-ink-soft leading-relaxed mb-3">{item.description}</p>
+                <Link
+                  href={item.href}
+                  className="inline-flex items-center gap-1 text-xs font-medium text-mint hover:text-ink transition-colors"
+                >
+                  Detaylı Bilgi <ArrowRight className="w-3 h-3" />
+                </Link>
+              </FadeIn>
+            ))}
           </div>
-        </section>
+        </div>
 
         {/* About */}
-        <section className="bg-cream-alt">
-          <div className="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28 grid md:grid-cols-[1.3fr_1fr] gap-16">
-            <div>
-              <Eyebrow>Hakkımızda</Eyebrow>
-              <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight mb-8">
-                Her gülüşe özenle yaklaşıyoruz
+        <section className="bg-white">
+          <div className="max-w-6xl mx-auto px-4 md:px-8 pt-16 md:pt-20 pb-20 md:pb-28 grid md:grid-cols-[1fr_1.2fr] gap-12 md:gap-16 items-center">
+            <FadeIn direction="left" className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-cream-alt">
+              <Image src="/doctor/dr-gri.jpg" alt="Dr. Ömer Özdemir" fill sizes="(min-width: 768px) 45vw, 100vw" style={{ objectFit: 'cover', objectPosition: 'center 25%' }} />
+            </FadeIn>
+            <FadeIn direction="right" delay={150}>
+              <Eyebrow>Hakkında</Eyebrow>
+              <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight mb-6">
+                Her gülüşe özenle yaklaşan bir hekim
               </h2>
-              <div className="space-y-4 max-w-xl">
+              <div className="space-y-4">
                 <p className="text-ink-soft leading-relaxed">
-                  Çocukların sağlıklı ve mutlu gülümsemeleri için çalışan bir çocuk diş
-                  hekimi. Diş tedavisini korkulan bir şey değil, eğlenceli bir deneyime
-                  dönüştürmek en sevdiği şey.
+                  Dr. Ömer Özdemir, çocuk diş hekimi. Amacı basit: diş hekimine gitmek,
+                  çocukların en korkulan olaylar listesinden çıksın.
                 </p>
                 <p className="text-ink-soft leading-relaxed">
                   İstanbul Üniversitesi Diş Hekimliği Fakültesi&apos;nden mezun oldu, aynı
-                  üniversitede Pedodonti (çocuk diş hekimliği) alanında doktorasını tamamladı.
+                  üniversitede Pedodonti (çocuk diş hekimliği) alanında akademik
+                  çalışmalarını yürütüyor.
                 </p>
                 <p className="text-ink-soft leading-relaxed">
-                  Bugüne kadar 7.000&apos;den fazla çocuğa tedavi uyguladı, araştırmalarını da
-                  Japonya&apos;daki Kyushu Üniversitesi&apos;nde sürdürdü.
+                  Mesai dışında gezer, okur, yazar. Hayatı sevenler kulübünün kurucu üyesi
+                  olması boşuna değil.
                 </p>
               </div>
-            </div>
-            <div className="space-y-6 md:pt-16">
-              <div className="border-t border-ink/10 pt-4">
-                <span className="block text-xs uppercase tracking-[0.15em] text-ink-soft mb-1">Eğitim</span>
-                <span className="text-ink font-medium">İstanbul Üniversitesi, Diş Hekimliği</span>
-              </div>
-              <div className="border-t border-ink/10 pt-4">
-                <span className="block text-xs uppercase tracking-[0.15em] text-ink-soft mb-1">Unvan</span>
-                <span className="text-ink font-medium">Diş Hekimi (Dr.)</span>
-              </div>
-              <div className="border-t border-ink/10 pt-4">
-                <span className="block text-xs uppercase tracking-[0.15em] text-ink-soft mb-1">Konum</span>
-                <span className="text-ink font-medium">Bakırköy, İstanbul</span>
-              </div>
-            </div>
+              <Link
+                href="/hakkinda"
+                className="inline-block mt-8 rounded-full bg-ink text-cream text-sm font-medium px-7 py-3.5 hover:bg-mint transition-colors"
+              >
+                Özgeçmişi İnceleyiniz
+              </Link>
+            </FadeIn>
           </div>
         </section>
 
-        {/* Cases */}
-        <section className="bg-cream">
-          <div className="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-24">
-            <Eyebrow>Vakalarımızdan</Eyebrow>
-            <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight mb-12">
-              Gerçek tedavi süreçlerinden kareler
-            </h2>
-            <div className="grid sm:grid-cols-3 gap-6">
-              {['/Picture1.png', '/Picture2.png', '/Picture3.jpg'].map((src) => (
-                <div key={src} className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-white">
-                  <Image src={src} alt="Tedavi vakası" fill style={{ objectFit: 'cover' }} />
-                </div>
+        {/* Featured treatments */}
+        <section className="bg-cream-alt">
+          <div className="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28">
+            <FadeIn className="max-w-2xl mb-12">
+              <Eyebrow>Tedaviler</Eyebrow>
+              <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
+                Öne Çıkan Tedaviler
+              </h2>
+            </FadeIn>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {treatments.map((t, i) => (
+                <FadeIn
+                  key={t.title}
+                  delay={i * 80}
+                  className="bg-white rounded-3xl border border-ink/5 p-6 hover:border-mint/30 hover:shadow-md transition-all duration-300"
+                >
+                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-mint-light text-mint mb-4">
+                    <t.icon className="w-4 h-4" />
+                  </span>
+                  <h3 className="font-serif text-lg text-ink mb-2">{t.title}</h3>
+                  <p className="text-sm text-ink-soft leading-relaxed mb-4">{t.description}</p>
+                  <Link
+                    href={`/tedaviler/${t.slug}`}
+                    className="inline-flex items-center gap-1 text-xs font-medium text-mint hover:text-ink transition-colors"
+                  >
+                    Detaylı Bilgi <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </FadeIn>
+              ))}
+            </div>
+            <FadeIn className="mt-10 text-center">
+              <Link
+                href="/tedaviler"
+                className="inline-block rounded-full bg-ink text-cream text-sm font-medium px-7 py-3.5 hover:bg-mint transition-colors"
+              >
+                Tüm Tedavileri İnceleyiniz
+              </Link>
+            </FadeIn>
+          </div>
+        </section>
+
+        {/* Clinics */}
+        <section className="bg-white">
+          <div className="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28">
+            <FadeIn className="max-w-2xl mb-12">
+              <Eyebrow>Klinikler</Eyebrow>
+              <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
+                İki yakada, iki klinik
+              </h2>
+            </FadeIn>
+            <div className="grid md:grid-cols-2 gap-6">
+              {clinics.map((clinic, i) => (
+                <FadeIn
+                  key={clinic.id}
+                  delay={i * 100}
+                  className="bg-cream-alt rounded-3xl border border-ink/5 p-6 md:p-8"
+                >
+                  <span className="block text-xs font-medium uppercase tracking-[0.2em] text-mint mb-3">
+                    {clinic.side}
+                  </span>
+                  <h3 className="font-serif text-xl text-ink mb-3">{clinic.name}</h3>
+                  <p className="flex items-start gap-2 text-sm text-ink-soft leading-relaxed mb-6">
+                    <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" aria-hidden />
+                    {clinic.address}
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <a
+                      href={clinic.phoneHref}
+                      className="inline-flex items-center gap-2 rounded-full bg-ink text-cream text-sm font-medium px-6 py-3 min-h-11 hover:bg-mint transition-colors"
+                    >
+                      <Phone className="w-4 h-4" aria-hidden />
+                      {clinic.phone}
+                    </a>
+                    <a
+                      href={clinic.whatsappHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center rounded-full border border-ink/20 text-ink text-sm font-medium px-6 py-3 min-h-11 hover:border-mint hover:text-mint transition-colors"
+                    >
+                      WhatsApp
+                    </a>
+                    <a
+                      href={clinic.mapsSearchUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center rounded-full border border-ink/20 text-ink text-sm font-medium px-6 py-3 min-h-11 hover:border-mint hover:text-mint transition-colors"
+                    >
+                      Haritada Açınız
+                    </a>
+                  </div>
+                </FadeIn>
               ))}
             </div>
           </div>
         </section>
 
         {/* Reviews */}
-        <section className="bg-cream-alt">
+        <section className="bg-cream">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28">
-            <div className="flex flex-wrap items-end justify-between gap-6 mb-14">
+            <FadeIn className="flex flex-wrap items-end justify-between gap-6 mb-14">
               <div>
                 <Eyebrow>Hasta Yorumları</Eyebrow>
                 <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
-                  Ailelerimiz ne diyor?
+                  Aileler ne diyor?
                 </h2>
+                <p className="text-xs text-ink-soft mt-2">
+                  (Google&apos;dan anlık olarak alınmaktadır)
+                </p>
               </div>
               <a
                 href="https://www.google.com/maps/search/?api=1&query=%C3%87ocuk+Di%C5%9F+Hekimi+%C3%96mer+Tar%C4%B1k+%C3%96zdemir"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 bg-white rounded-full pl-3 pr-4 py-2 border border-ink/10 hover:border-mint/30 transition-colors"
+                className="flex items-center gap-2.5 bg-cream-alt rounded-full pl-3 pr-4 py-2 border border-ink/10 hover:border-mint/30 transition-colors"
               >
                 <GoogleLogo className="w-5 h-5 flex-shrink-0" />
                 <span className="text-sm font-medium text-ink">{rating.toFixed(1)}</span>
@@ -204,13 +355,17 @@ export default async function Home() {
                   <span className="text-xs text-ink-soft">({reviewCount})</span>
                 )}
               </a>
-            </div>
+            </FadeIn>
             <div className="grid lg:grid-cols-2 gap-6 lg:h-[34rem]">
               <div className="space-y-4 lg:overflow-y-auto lg:pr-2 lg:h-full">
-                {reviews.map((review) => (
-                  <div key={review.author} className="bg-white rounded-2xl border border-ink/5 p-6">
+                {reviews.map((review, i) => (
+                  <FadeIn
+                    key={review.author}
+                    delay={i * 80}
+                    className="bg-cream-alt rounded-2xl border border-ink/5 p-6 hover:shadow-md hover:border-mint/20 hover:-translate-y-0.5 transition-all duration-300"
+                  >
                     <div className="flex items-center gap-3 mb-4">
-                      <ReviewAvatar src={review.authorPhoto} name={review.author} />
+                      <ReviewAvatar name={review.author} />
                       <div className="min-w-0">
                         <span className="text-ink font-medium block truncate">{review.author}</span>
                         <div className="flex items-center gap-2">
@@ -232,14 +387,14 @@ export default async function Home() {
                         rel="noopener noreferrer"
                         className="inline-block mt-4 text-xs font-medium text-mint hover:text-ink transition-colors"
                       >
-                        Google&apos;da görüntüle →
+                        Google&apos;da görüntüleyiniz →
                       </a>
                     )}
-                  </div>
+                  </FadeIn>
                 ))}
               </div>
 
-              <div className="relative rounded-3xl overflow-hidden border border-ink/5 h-72 lg:h-full">
+              <FadeIn direction="right" className="relative rounded-3xl overflow-hidden border border-ink/5 h-72 lg:h-full">
                 <a
                   href="https://www.google.com/maps/search/?api=1&query=%C3%87ocuk+Di%C5%9F+Hekimi+%C3%96mer+Tar%C4%B1k+%C3%96zdemir"
                   target="_blank"
@@ -247,35 +402,105 @@ export default async function Home() {
                   className="absolute top-4 left-4 z-10 inline-flex items-center gap-1.5 bg-white text-ink text-xs font-medium px-3.5 py-2 rounded-full shadow-md hover:bg-mint-light transition-colors"
                 >
                   <GoogleLogo className="w-3.5 h-3.5" />
-                  Google&apos;da Görüntüle
+                  Google&apos;da Görüntüleyiniz
                 </a>
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3007.018158044864!2d28.878822776592294!3d40.99121347930272!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cabbfba149182f%3A0xe4a47a5da9b502cf!2s%C3%87ocuk%20Di%C5%9F%20Hekimi%20%C3%96mer%20Tar%C4%B1k%20%C3%96zdemir!5e0!3m2!1str!2str!4v1716462584123!5m2!1str!2str"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
+                  src={clinics[0].mapEmbedSrc}
+                  title={`${clinics[0].name} konumu`}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Klinik Konumu"
+                  allowFullScreen
+                  className="w-full h-full border-0"
                 ></iframe>
-              </div>
+              </FadeIn>
             </div>
+          </div>
+        </section>
+
+        {/* Clinic gallery */}
+        <section className="bg-cream-alt">
+          <div className="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-24">
+            <FadeIn>
+              <Eyebrow>Klinik</Eyebrow>
+              <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight mb-12">
+                Klinik Galerisi
+              </h2>
+            </FadeIn>
+            {clinicPhotos.length === 0 ? (
+              <FadeIn delay={100} className="bg-white rounded-3xl border border-ink/5 p-10 text-center max-w-xl">
+                <p className="text-ink-soft leading-relaxed">
+                  Fotoğraflar yakında burada olacak.
+                </p>
+              </FadeIn>
+            ) : (
+              <PhotoSlider photos={clinicPhotos} />
+            )}
           </div>
         </section>
 
         {/* Closing CTA */}
         <section className="bg-ink text-cream">
-          <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+          <FadeIn className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
             <h2 className="font-serif text-2xl md:text-3xl leading-tight max-w-md">
-              Çocuğunuz için ilk adımı birlikte atalım
+              İlk randevu için bir mesaj yeterli
             </h2>
             <Link
-              href="/contact"
-              className="rounded-md bg-cream text-ink text-sm font-medium px-7 py-3.5 hover:bg-mint-light transition-colors flex-shrink-0"
+              href="/iletisim"
+              className="rounded-full bg-cream text-ink text-sm font-medium px-7 py-3.5 hover:bg-mint-light transition-colors flex-shrink-0"
             >
-              Randevu Al
+              Randevu Alınız
             </Link>
+          </FadeIn>
+        </section>
+
+        {/* Journal teaser */}
+        <section className="bg-white">
+          <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20">
+            <FadeIn className="flex flex-wrap items-end justify-between gap-6 mb-8">
+              <div>
+                <Eyebrow>Günlük</Eyebrow>
+                <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight">
+                  Notlardan
+                </h2>
+              </div>
+              <Link
+                href="/blog"
+                className="text-sm font-medium text-mint hover:text-ink transition-colors flex-shrink-0"
+              >
+                Tüm Yazılar →
+              </Link>
+            </FadeIn>
+            {blogPosts.length === 0 ? (
+              <FadeIn delay={100} className="bg-cream-alt rounded-3xl border border-ink/5 p-10 text-center">
+                <p className="text-ink-soft leading-relaxed">
+                  Henüz bir yazı yok, yakında burada olacak.
+                </p>
+              </FadeIn>
+            ) : (
+              <FadeIn delay={100}>
+                <Link
+                  href={`/blog/${blogPosts[0].slug}`}
+                  className="group flex flex-col sm:flex-row items-stretch bg-cream-alt rounded-3xl border border-ink/5 overflow-hidden hover:border-mint/30 transition-colors"
+                >
+                  <div className="relative sm:w-64 aspect-[4/3] sm:aspect-auto flex-shrink-0">
+                    <Image
+                      src={blogPosts[0].image}
+                      alt={blogPosts[0].title}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      className="group-hover:scale-[1.03] transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="p-8 flex flex-col justify-center">
+                    <span className="text-xs text-ink-soft mb-2">{blogPosts[0].date}</span>
+                    <h3 className="font-serif text-xl text-ink mb-2 leading-snug">
+                      {blogPosts[0].title}
+                    </h3>
+                    <p className="text-sm text-ink-soft leading-relaxed">{blogPosts[0].excerpt}</p>
+                  </div>
+                </Link>
+              </FadeIn>
+            )}
           </div>
         </section>
       </main>

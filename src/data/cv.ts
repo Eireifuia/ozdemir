@@ -2,7 +2,7 @@ export const education = [
   {
     degree: 'Doktora (PhD), Pedodonti (Çocuk Diş Hekimliği)',
     institution: 'İstanbul Üniversitesi, Diş Hekimliği Fakültesi',
-    period: '2023 – 2025',
+    period: '2023 – 2027',
     location: 'İstanbul, Türkiye',
   },
   {
@@ -12,7 +12,7 @@ export const education = [
     location: 'İstanbul, Türkiye',
   },
   {
-    degree: 'Sağlık Kurumları İşletmeciliği',
+    degree: 'Sağlık Kurumları İşletmeciliği (Ön Lisans)',
     institution: 'İstanbul Üniversitesi AUZEF',
     period: '2020 – 2022',
     location: 'İstanbul, Türkiye',
@@ -49,14 +49,14 @@ export const experience = [
     org: 'Kyushu Üniversitesi',
     role: 'Misafir Araştırmacı',
     description:
-      'Graduate School of Dental Science\'ta misafir araştırmacı olarak bulundu (Prof. Hidefumi Maeda ve Doç. Dr. Hideki Sugii danışmanlığında).',
-    period: '2025 – 2027',
+      'Japonya\'nın en iyi dört üniversitesinden biri olan Kyushu University Graduate School of Dental Science\'ta 1 yıl boyunca misafir araştırmacı olarak bulundu.',
+    period: '2025 – 2026',
     location: 'Fukuoka, Japonya',
   },
   {
     org: 'Whitecenter Belgie',
     role: 'Erasmus+ Stajyeri',
-    description: 'Dr. Marianne Van Espen gözetiminde üç aylık klinik staj.',
+    description: 'Erasmus+ programı kapsamında üç aylık klinik staj.',
     period: 'Haziran – Eylül 2024',
     location: 'Genk, Belçika',
   },

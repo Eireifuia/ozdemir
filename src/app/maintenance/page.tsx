@@ -15,7 +15,7 @@ export default function MaintenancePage() {
           Site şu anda güncelleniyor
         </h1>
         <p className="text-cream/65 leading-relaxed mb-8">
-          Yeni içerikler ve AI asistan üzerinde çalışıyoruz, çok yakında buradayız.
+          Yeni içerikler ve AI asistan üzerinde çalışılıyor, çok yakında burada.
         </p>
         <p className="text-sm text-cream/50">
           Acil bir durum için hemen arayabilirsiniz:{' '}

@@ -42,6 +42,13 @@ yarn-error.log*
 # claude code local settings (may contain command history with secrets)
 /.claude/settings.local.json
 
+# site dışı çalışma dosyaları (mobil uygulama devir paketi, Blender denemeleri)
+/app-devir/
+/app-devir.zip
+/blender/
+/abacus/
+/dev-server.log
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

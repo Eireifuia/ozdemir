@@ -4,13 +4,13 @@
 // Yeni bir isim/bilgi eklenecekse SADECE burası güncellenir.
 
 export const ariseIdentityBio: string[] = [
-  "Diş hekimi (DDS, 2017-2022) ve İstanbul Üniversitesi'nde Pedodonti (Pediatrik Diş Hekimliği) alanında doktorasını tamamladı (2023-2025).",
-  "2022'de İstanbul Üniversitesi Diş Hekimliği Fakültesi'nden onur derecesiyle mezun oldu, 7000'den fazla hasta tedavi etti.",
-  "Japonya'da, Kyushu Üniversitesi Diş Hekimliği Bilimleri Enstitüsü'nde (Fukuoka) misafir araştırmacı olarak bulundu (2025-2027) ve bu araştırmacılığı tamamladı; Prof. Hidefumi Maeda ve Doç. Dr. Hideki Sugii ile çalıştı.",
+  "Diş hekimi (DDS, 2017-2022). İstanbul Üniversitesi'nde Pedodonti (Pediatrik Diş Hekimliği) alanındaki doktora eğitimine 2023'te başladı, eğitimi devam ediyor ve 2027'de tamamlanması bekleniyor.",
+  "2022'de İstanbul Üniversitesi Diş Hekimliği Fakültesi'nden onur derecesiyle mezun oldu. Aynı dönemde (2020-2022) İstanbul Üniversitesi Sağlık Kurumları İşletmeciliği bölümünde ön lisans eğitimi aldı.",
+  "Doktora çalışmaları kapsamında Japonya'da, Kyushu Üniversitesi Diş Hekimliği Bilimleri Enstitüsü'nde (Fukuoka) 2025-2026 yılları arasında 1 yıl boyunca misafir araştırmacı olarak bulundu ve araştırmacılığı tamamlayarak döndü. Hoca ve ekip arkadaşlarının isimleri paylaşılmaz.",
   "Doktora araştırması, avulse (yerinden çıkmış) dişler için saklama solüsyonlarına eklenen periodontal ligament kök hücre kaynaklı eksozomlar üzerine.",
   "Yapay zeka/chatbot performansı üzerine de yayınları var (ChatGPT/Gemini gibi botların diş sağlığı sorularına verdiği yanıtların kalitesini değerlendiren araştırmalar, BMC Oral Health ve Dental Traumatology gibi dergilerde).",
   "Papillon-Lèfevre ve Gorlin-Goltz sendromu gibi nadir vaka sunumlarıyla kongrelerde poster sunumları yaptı.",
-  "Erasmus+ ile Belçika'da (Genk, Whitecenter, Dr. Marianne Van Espen) klinik staj yaptı; Zanzibar ve Nijer'de gönüllü diş hekimliği yaptı.",
+  "Erasmus+ programı kapsamında Belçika'nın Genk şehrindeki Whitecenter Belgie'de klinik staj yaptı. Zanzibar'da (2018) ve Nijer'de (2019) gönüllü sağlık ve diş hekimliği hizmeti verdi. Erasmus stajının tarih ve kişi ayrıntıları paylaşılmaz.",
   "Aşçı yardımcılığı sertifikası var, Türk İşaret Dili'nde A2 seviyesinde sertifikalı.",
   "Hobiler: seyahat, Japonca öğrenimi (JLPT N5 tamamlandı, şu an N4), strateji/RPG oyunları, manhwa okumak (Solo Leveling, Tower of God, The Beginning After the End, Noblesse, Sweet Home).",
   "Instagram'da (@omertarikozdemir) esprili ve dişçilikle ilgili içerikler paylaşır; kendi web sitesinde seyahat rehberleri ve deneyim yazıları yazar.",
