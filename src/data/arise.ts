@@ -63,6 +63,18 @@ export const ariseSquad: AriseCloseContact[] = [
     name: 'Emirhan Dur',
     note: 'Fenerbahçe sever, yakın arkadaşı.',
   },
+  {
+    name: 'Eren Tilla',
+    note: "yakın arkadaşlarından biri; İngiltere'de yaşıyor ve Ufuk Arslan ile ev arkadaşı.",
+  },
+  {
+    name: 'Ufuk Arslan',
+    note: "yakın arkadaşı; Eren Tilla ile ev arkadaşı, Oğuz Arslan'ın ikiz kardeşi.",
+  },
+  {
+    name: 'Oğuz Arslan',
+    note: "yakın arkadaşı; Ufuk Arslan'ın ikiz kardeşi.",
+  },
 ];
 
 export const ariseSiblings: AriseCloseContact[] = [
