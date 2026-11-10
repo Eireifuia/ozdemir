@@ -6,7 +6,9 @@ import Footer from '@/components/Footer';
 import FadeIn from '@/components/FadeIn';
 import RevealText from '@/components/RevealText';
 import PhotoSlider from '@/components/PhotoSlider';
-import { Star, Check, ArrowRight, Sparkles, Activity, Glasses, ShieldAlert, Moon, Smile, MapPin, Phone } from 'lucide-react';
+import { Star, Check, ArrowRight, MapPin, Phone } from 'lucide-react';
+import TreatmentVisual from '@/components/TreatmentVisual';
+import { getTreatment } from '@/data/treatments';
 import { getGoogleReviews, type GoogleReview } from '@/lib/googleReviews';
 import { blogPosts } from '@/data/blogPosts';
 import { clinicPhotos } from '@/data/clinicPhotos';
@@ -37,58 +39,52 @@ const fallbackReviews: GoogleReview[] = [
 
 const valueProps = [
   {
-    title: 'Çocuğa Özel Diş Hekimliği',
-    description: 'Pedodonti alanındaki akademik çalışmalar klinik pratikle birlikte yürütülüyor. Her çocuk için ayrı bir tedavi planı hazırlanıyor.',
+    title: 'Çocuğa özel diş hekimliği',
+    description: 'Pedodonti alanındaki akademik çalışmalar klinik pratikle birlikte yürütülmektedir. Her çocuk için ayrı bir tedavi planı hazırlanmaktadır.',
     href: '/hakkinda',
   },
   {
-    title: 'İki Yakada Klinik',
-    description: 'Avrupa Yakası\'nda Bakırköy, Anadolu Yakası\'nda Acıbadem. Hangi yakada olursanız olun, köprüyü geçmeden randevu bulunuyor.',
+    title: 'İki yakada klinik',
+    description: 'Avrupa Yakası\'nda Bakırköy\'de ve Anadolu Yakası\'nda Acıbadem\'de hizmet verilmektedir. Size yakın klinik için randevu alabilirsiniz.',
     href: '/iletisim',
   },
   {
-    title: 'İlk Dişten Ergenliğe',
-    description: 'Bebeklikteki ilk diş de, ergenlikteki diş teli merakı da aynı kapıdan giriyor. Her yaşın derdi ayrı, yaklaşımı da ayrı.',
+    title: 'İlk dişten ergenliğe',
+    description: 'Bebeklikteki ilk diş muayenesinden ergenlikteki diş teli sorularına kadar her yaş grubu için hizmet verilmektedir. Her yaşın gereksinimi ve yaklaşımı farklıdır.',
     href: '/tedaviler',
   },
 ];
 
-const treatments = [
+const featuredTreatments = [
   {
-    icon: Sparkles,
     slug: 'cocuklarda-curuk-tedavisi',
-    title: 'Çürük Tedavisi',
-    description: 'Küçük ve yüzeysel çürüklerde koruyucu dolgu çoğu zaman yeterli oluyor. Kısa, rahat bir randevu.',
+    title: 'Çürük tedavisi',
+    description: 'Küçük ve yüzeysel çürüklerde koruyucu dolgu çoğu zaman yeterlidir. Randevu genellikle kısa sürer ve çocuklar için rahat geçer.',
   },
   {
-    icon: Activity,
     slug: 'cocuklarda-kanal-tedavisi',
-    title: 'Kanal Tedavisi',
-    description: 'Kanal tedavisi denince akla gelen korku çocuklarda geçerli değil. Doğru anestezi ile işlem hissedilmeden tamamlanıyor.',
+    title: 'Kanal tedavisi',
+    description: 'Uygun anestezi uygulandığında işlem sırasında ağrı hissedilmesi beklenmemektedir. Aşamaların ayrıntıları görsellerle anlatılmaktadır.',
   },
   {
-    icon: Glasses,
     slug: 'vr-destekli-cocuk-dis-tedavisi',
-    title: 'VR Destekli Tedavi',
-    description: 'Meta Quest 3 gözlüğü takan çocuk bir anda başka bir dünyada. Diş hekimi koltuğu arka plana düşüyor.',
+    title: 'VR destekli tedavi',
+    description: 'Sanal gerçeklik gözlüğü takan çocuğun dikkati tedavi sırasında başka bir yöne çekilmektedir. Bu sayede diş hekimi koltuğu daha az fark edilmektedir.',
   },
   {
-    icon: ShieldAlert,
     slug: 'cocuklarda-dis-travmasi',
-    title: 'Diş Travması',
-    description: 'Düşme, çarpma, kırılan ya da oynayan diş. İlk dakikalar önemli olduğu için hızlı müdahale gerekiyor.',
+    title: 'Diş travması',
+    description: 'Düşme ya da çarpma sonrasında dişte kırılma veya oynama görülebilir. İlk dakikalar önemli olduğundan hızlı müdahale gerekmektedir.',
   },
   {
-    icon: Moon,
     slug: 'cocuklarda-genel-anestezi-sedasyon',
-    title: 'Genel Anestezi / Sedasyon',
-    description: 'Çok sayıda işlem gereken ya da koltukta durmakta zorlanan küçük hastalar için güvenli ve kontrollü bir seçenek.',
+    title: 'Genel anestezi ve sedasyon',
+    description: 'Çok sayıda işlem gereken ya da koltukta durmakta zorlanan çocuklar için değerlendirilen bir seçenektir.',
   },
   {
-    icon: Smile,
     slug: 'cocuklarda-erken-ortodontik-tedavi',
-    title: 'Erken Ortodontik Müdahale',
-    description: 'Bazı sorunlar süt dişi döneminde bile fark edilebiliyor. Erken bakılınca çoğu zaman basit bir apareyle çözülüyor.',
+    title: 'Erken ortodontik müdahale',
+    description: 'Bazı sorunlar süt dişi döneminde bile fark edilebilir. Erken değerlendirildiğinde çoğu zaman basit bir apareyle çözülebilmektedir.',
   },
 ];
 
@@ -140,36 +136,57 @@ export default async function Home() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd()) }} />
       <main id="icerik">
         {/* Hero */}
-        <section className="bg-ink text-cream">
-          <div className="max-w-6xl mx-auto px-4 md:px-8 pt-20 md:pt-28 pb-32 md:pb-40">
-            <FadeIn className="max-w-2xl">
-              <Eyebrow tone="dark">Çocuk Diş Hekimi Dr. Ömer Özdemir</Eyebrow>
-              <h1 className="font-serif font-light text-5xl md:text-6xl lg:text-[4.2rem] leading-[1.05] tracking-tight mb-6">
-                <RevealText text="Çocuklar için korkusuz diş hekimliği" />
-              </h1>
-              <p className="text-cream/65 leading-relaxed mb-10 max-w-md">
-                Diş hekimi koltuğu, çocuğunuz için korkulacak değil, merak edilecek bir yer olabilir.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/iletisim"
-                  className="rounded-full bg-cream text-ink text-sm font-medium px-7 py-3.5 hover:bg-mint-light transition-colors"
-                >
-                  İletişime Geçiniz
-                </Link>
-                <Link
-                  href="/tedaviler"
-                  className="rounded-full border border-cream/25 text-cream text-sm font-medium px-7 py-3.5 hover:bg-cream/10 transition-colors"
-                >
-                  Tedavileri İnceleyiniz
-                </Link>
-              </div>
-            </FadeIn>
+        <section className="px-3 md:px-5 pt-2 md:pt-3">
+          <div className="relative overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem] bg-ink text-white grid md:grid-cols-[1.05fr_0.95fr] md:min-h-[700px]">
+            <div className="relative z-10 flex items-center px-6 md:px-12 lg:px-16 pt-16 pb-10 md:py-20 order-1">
+              <FadeIn className="max-w-xl">
+                <Eyebrow tone="dark">Çocuk Diş Hekimi Dr. Ömer Özdemir</Eyebrow>
+                <h1 className="font-serif font-semibold text-[2.6rem] sm:text-6xl md:text-6xl lg:text-[4.6rem] leading-[1.02] tracking-tight mb-6">
+                  <RevealText text="Çocuklar için korkusuz diş hekimliği" />
+                </h1>
+                <p className="text-white/75 text-base md:text-lg leading-relaxed mb-10 max-w-md">
+                  Diş hekimi koltuğu çocuğunuz için korku değil merak uyandıran bir yer olabilmektedir.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Link
+                    href="/iletisim"
+                    className="rounded-full bg-white text-ink text-sm font-semibold px-7 py-3.5 hover:bg-mint-light transition-colors"
+                  >
+                    İletişime Geçiniz
+                  </Link>
+                  <Link
+                    href="/tedaviler"
+                    className="rounded-full border border-white/35 text-white text-sm font-semibold px-7 py-3.5 hover:bg-white/10 transition-colors"
+                  >
+                    Tedavileri İnceleyiniz
+                  </Link>
+                </div>
+              </FadeIn>
+            </div>
+            <div className="relative order-2 min-h-[420px] md:min-h-0">
+              <Image
+                src="/doctor/dr-gri.jpg"
+                alt="Dr. Ömer Özdemir"
+                fill
+                priority
+                sizes="(min-width: 768px) 48vw, 100vw"
+                className="object-cover"
+                style={{ objectPosition: 'center 18%' }}
+              />
+              <div
+                aria-hidden
+                className="absolute inset-0 bg-gradient-to-b from-ink via-ink/0 to-transparent h-1/4 md:hidden"
+              />
+              <div
+                aria-hidden
+                className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-ink to-transparent hidden md:block"
+              />
+            </div>
           </div>
         </section>
 
-        {/* Value props — overlapping the hero's bottom edge */}
-        <div className="relative -mt-20 md:-mt-24 px-4 md:px-8">
+        {/* Value props */}
+        <div className="relative mt-8 md:mt-10 px-4 md:px-8">
           <div className="max-w-6xl mx-auto grid sm:grid-cols-3 gap-4 md:gap-6">
             {valueProps.map((item, i) => (
               <FadeIn
@@ -177,16 +194,16 @@ export default async function Home() {
                 delay={i * 100}
                 className="bg-white rounded-2xl shadow-lg border border-ink/5 p-6"
               >
-                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-mint-light text-mint mb-4">
-                  <Check className="w-4 h-4" />
-                </span>
-                <h3 className="font-serif text-lg text-ink mb-2 leading-snug">{item.title}</h3>
+                <h3 className="font-serif text-lg text-ink mb-2 leading-snug flex items-center gap-2">
+                  <Check className="w-4 h-4 shrink-0 text-mint" strokeWidth={2.5} />
+                  {item.title}
+                </h3>
                 <p className="text-sm text-ink-soft leading-relaxed mb-3">{item.description}</p>
                 <Link
                   href={item.href}
                   className="inline-flex items-center gap-1 text-xs font-medium text-mint hover:text-ink transition-colors"
                 >
-                  Detaylı Bilgi <ArrowRight className="w-3 h-3" />
+                  Ayrıntıları İnceleyiniz <ArrowRight className="w-3 h-3" />
                 </Link>
               </FadeIn>
             ))}
@@ -197,26 +214,25 @@ export default async function Home() {
         <section className="bg-white">
           <div className="max-w-6xl mx-auto px-4 md:px-8 pt-16 md:pt-20 pb-20 md:pb-28 grid md:grid-cols-[1fr_1.2fr] gap-12 md:gap-16 items-center">
             <FadeIn direction="left" className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-cream-alt">
-              <Image src="/doctor/dr-gri.jpg" alt="Dr. Ömer Özdemir" fill sizes="(min-width: 768px) 45vw, 100vw" style={{ objectFit: 'cover', objectPosition: 'center 25%' }} />
+              <Image src="/doctor/dr-pembe-panter-sade.jpg" alt="Dr. Ömer Özdemir, elinde diş modeli olan pembe bir peluş oyuncakla gülümsüyor" fill sizes="(min-width: 768px) 45vw, 100vw" style={{ objectFit: 'cover', objectPosition: 'center 30%' }} />
             </FadeIn>
             <FadeIn direction="right" delay={150}>
-              <Eyebrow>Hakkında</Eyebrow>
+              <Eyebrow>Hakkımda</Eyebrow>
               <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight mb-6">
-                Her gülüşe özenle yaklaşan bir hekim
+                Çocuk diş hekimi Dr. Ömer Özdemir
               </h2>
               <div className="space-y-4">
                 <p className="text-ink-soft leading-relaxed">
-                  Dr. Ömer Özdemir, çocuk diş hekimi. Amacı basit: diş hekimine gitmek,
-                  çocukların en korkulan olaylar listesinden çıksın.
+                  Dr. Ömer Özdemir çocuk diş hekimidir. Amacı diş hekimine gitmenin
+                  çocuklar için kaygı verici bir deneyim olmaktan çıkmasıdır.
                 </p>
                 <p className="text-ink-soft leading-relaxed">
-                  İstanbul Üniversitesi Diş Hekimliği Fakültesi&apos;nden mezun oldu, aynı
-                  üniversitede Pedodonti (çocuk diş hekimliği) alanında akademik
-                  çalışmalarını yürütüyor.
+                  İstanbul Üniversitesi Diş Hekimliği Fakültesi&apos;nden mezun olmuştur ve
+                  aynı üniversitede Pedodonti (çocuk diş hekimliği) alanında akademik
+                  çalışmalarını yürütmektedir.
                 </p>
                 <p className="text-ink-soft leading-relaxed">
-                  Mesai dışında gezer, okur, yazar. Hayatı sevenler kulübünün kurucu üyesi
-                  olması boşuna değil.
+                  Mesai dışında seyahat etmekte ve yazmaktadır.
                 </p>
               </div>
               <Link
@@ -235,29 +251,31 @@ export default async function Home() {
             <FadeIn className="max-w-2xl mb-12">
               <Eyebrow>Tedaviler</Eyebrow>
               <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
-                Öne Çıkan Tedaviler
+                Öne çıkan tedaviler
               </h2>
             </FadeIn>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {treatments.map((t, i) => (
-                <FadeIn
-                  key={t.title}
-                  delay={i * 80}
-                  className="bg-white rounded-3xl border border-ink/5 p-6 hover:border-mint/30 hover:shadow-md transition-all duration-300"
-                >
-                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-mint-light text-mint mb-4">
-                    <t.icon className="w-4 h-4" />
-                  </span>
-                  <h3 className="font-serif text-lg text-ink mb-2">{t.title}</h3>
-                  <p className="text-sm text-ink-soft leading-relaxed mb-4">{t.description}</p>
-                  <Link
-                    href={`/tedaviler/${t.slug}`}
-                    className="inline-flex items-center gap-1 text-xs font-medium text-mint hover:text-ink transition-colors"
-                  >
-                    Detaylı Bilgi <ArrowRight className="w-3 h-3" />
-                  </Link>
-                </FadeIn>
-              ))}
+              {featuredTreatments.map((t, i) => {
+                const treatment = getTreatment(t.slug);
+                if (!treatment) return null;
+                return (
+                  <FadeIn key={t.slug} delay={i * 80} className="h-full">
+                    <Link
+                      href={`/tedaviler/${t.slug}`}
+                      className="group block h-full bg-white rounded-3xl border border-ink/5 overflow-hidden hover:border-mint/30 hover:shadow-lg transition-all duration-300"
+                    >
+                      <TreatmentVisual treatment={treatment} variant="card" />
+                      <div className="p-6">
+                        <h3 className="font-serif text-lg text-ink mb-2">{t.title}</h3>
+                        <p className="text-sm text-ink-soft leading-relaxed mb-4">{t.description}</p>
+                        <span className="inline-flex items-center gap-1 text-xs font-medium text-mint group-hover:text-ink transition-colors">
+                          Ayrıntıları İnceleyiniz <ArrowRight className="w-3 h-3" />
+                        </span>
+                      </div>
+                    </Link>
+                  </FadeIn>
+                );
+              })}
             </div>
             <FadeIn className="mt-10 text-center">
               <Link
@@ -276,7 +294,7 @@ export default async function Home() {
             <FadeIn className="max-w-2xl mb-12">
               <Eyebrow>Klinikler</Eyebrow>
               <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
-                İki yakada, iki klinik
+                İki yakada iki klinik
               </h2>
             </FadeIn>
             <div className="grid md:grid-cols-2 gap-6">
@@ -316,7 +334,7 @@ export default async function Home() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center rounded-full border border-ink/20 text-ink text-sm font-medium px-6 py-3 min-h-11 hover:border-mint hover:text-mint transition-colors"
                     >
-                      Haritada Açınız
+                      Haritada Görüntüleyiniz
                     </a>
                   </div>
                 </FadeIn>
@@ -332,10 +350,10 @@ export default async function Home() {
               <div>
                 <Eyebrow>Hasta Yorumları</Eyebrow>
                 <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
-                  Aileler ne diyor?
+                  Ailelerin görüşleri
                 </h2>
                 <p className="text-xs text-ink-soft mt-2">
-                  (Google&apos;dan anlık olarak alınmaktadır)
+                  Yorumlar Google&apos;dan anlık olarak alınmaktadır.
                 </p>
               </div>
               <a
@@ -387,7 +405,7 @@ export default async function Home() {
                         rel="noopener noreferrer"
                         className="inline-block mt-4 text-xs font-medium text-mint hover:text-ink transition-colors"
                       >
-                        Google&apos;da görüntüleyiniz →
+                        Google&apos;da görüntüleyiniz
                       </a>
                     )}
                   </FadeIn>
@@ -423,13 +441,13 @@ export default async function Home() {
             <FadeIn>
               <Eyebrow>Klinik</Eyebrow>
               <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight mb-12">
-                Klinik Galerisi
+                Klinik galerisi
               </h2>
             </FadeIn>
             {clinicPhotos.length === 0 ? (
               <FadeIn delay={100} className="bg-white rounded-3xl border border-ink/5 p-10 text-center max-w-xl">
                 <p className="text-ink-soft leading-relaxed">
-                  Fotoğraflar yakında burada olacak.
+                  Fotoğraflar yakında eklenecektir.
                 </p>
               </FadeIn>
             ) : (
@@ -442,7 +460,7 @@ export default async function Home() {
         <section className="bg-ink text-cream">
           <FadeIn className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
             <h2 className="font-serif text-2xl md:text-3xl leading-tight max-w-md">
-              İlk randevu için bir mesaj yeterli
+              İlk randevu için bir mesaj göndermeniz yeterlidir
             </h2>
             <Link
               href="/iletisim"
@@ -467,13 +485,13 @@ export default async function Home() {
                 href="/blog"
                 className="text-sm font-medium text-mint hover:text-ink transition-colors flex-shrink-0"
               >
-                Tüm Yazılar →
+                Tüm Yazıları İnceleyiniz
               </Link>
             </FadeIn>
             {blogPosts.length === 0 ? (
               <FadeIn delay={100} className="bg-cream-alt rounded-3xl border border-ink/5 p-10 text-center">
                 <p className="text-ink-soft leading-relaxed">
-                  Henüz bir yazı yok, yakında burada olacak.
+                  Henüz yazı bulunmamaktadır. Yazılar yakında eklenecektir.
                 </p>
               </FadeIn>
             ) : (

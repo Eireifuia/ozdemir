@@ -10,7 +10,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Çocuk Diş Tedavileri | Çocuk Diş Hekimi Dr. Ömer Özdemir',
   description:
-    'Çocuklarda koruyucu bakım, çürük ve kanal tedavisi, diş kaplaması, VR destekli tedavi, diş travması, genel anestezi, erken ortodonti ve daha fazlası. Bakırköy ve Acıbadem kliniklerinde çocuk diş hekimi Dr. Ömer Özdemir.',
+    'Çocuklarda koruyucu bakım, çürük ve kanal tedavisi, diş kaplaması, yer tutucu, diş travması, genel anestezi ve erken ortodonti hakkında bilgiler. Bakırköy ve Acıbadem kliniklerinde çocuk diş hekimi Dr. Ömer Özdemir.',
   alternates: { canonical: '/tedaviler' },
 };
 
@@ -39,8 +39,8 @@ export default function Tedaviler() {
               <RevealText text="Tedaviler" />
             </h1>
             <p className="text-cream/65 leading-relaxed mt-4 max-w-lg">
-              Çocuklara özel diş tedavileri: ne zaman gerekiyor, nasıl uygulanıyor, ailelerin
-              bilmesi gerekenler neler.
+              Çocuklara özel diş tedavilerinin ne zaman gerektiği, nasıl uygulandığı ve ailelerin
+              bilmesi gereken noktalar bu sayfada yer almaktadır.
             </p>
           </FadeIn>
         </section>
@@ -61,14 +61,14 @@ export default function Tedaviler() {
                 Ailelerin en çok sorduğu sorular
               </h2>
               <p className="text-ink-soft leading-relaxed">
-                Çocuğunuzun diş sağlığıyla ilgili merak edilen konular detaylıca ele alındı.
+                Çocuğunuzun diş sağlığıyla ilgili merak edilen konular ayrıntılı biçimde ele alınmıştır.
                 Başlığa tıklayarak açabilirsiniz.
               </p>
               <Link
                 href="/sss"
                 className="inline-block mt-4 text-sm font-medium text-mint hover:text-ink transition-colors"
               >
-                Tüm sık sorulan sorular →
+                Tüm Sık Sorulan Soruları İnceleyiniz
               </Link>
             </FadeIn>
             <FadeIn delay={100}>

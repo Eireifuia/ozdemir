@@ -5,9 +5,9 @@ import cities from '@/data/turkeyMapPaths.js';
 
 type City = { plate: string; city: string; draw: string };
 
-const MINT = '#1F5B3F';
-const CREAM_ALT = '#F4F1EA';
-const BORDER = '#B7AE99';
+const MINT = '#1b5f9f';
+const CREAM_ALT = '#e8f1f9';
+const BORDER = '#9db3c8';
 
 const TurkeyMapView = ({ visitedPlateCodes }: { visitedPlateCodes: string[] }) => {
   const [hovered, setHovered] = useState<{ name: string; x: number; y: number } | null>(null);

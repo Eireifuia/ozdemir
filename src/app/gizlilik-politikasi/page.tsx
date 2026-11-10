@@ -12,30 +12,30 @@ export default function GizlilikPage() {
   return (
     <LegalPage
       title="Gizlilik Politikası"
-      intro="Bu site, ziyaretçilerinden mümkün olduğunca az veri toplayacak şekilde hazırlanmıştır."
+      intro="Bu site ziyaretçilerden az veri toplayacak biçimde hazırlanmıştır."
     >
       <LH2>Kısaca</LH2>
       <LUL
         items={[
           'Sitenin kendisi reklam, takip veya profil çıkarma amaçlı çerez kullanmaz.',
-          'Yazı tipleri kendi sunucumuzdan sunulur; tarayıcınız bunun için Google’a istek göndermez.',
-          'Ana sayfa ve iletişim sayfasındaki haritalar Google tarafından sunulur; bu sayfalar açıldığında Google ile bağlantı kurulur.',
-          'İletişim formu mesajınızı saklamaz; WhatsApp sohbetini hazır metinle açar.',
-          'Randevu için sağlık bilgisi istenmez; lütfen sağlık bilgilerinizi site üzerinden paylaşmayınız.',
+          'Yazı tipleri site sunucusundan sunulur ve tarayıcı bunun için Google’a istek göndermez.',
+          'Ana sayfa ve iletişim sayfasındaki haritalar Google tarafından sunulur ve bu sayfalar açıldığında Google ile bağlantı kurulur.',
+          'İletişim formu mesajı saklamaz ve yalnızca WhatsApp sohbetini hazır metinle açar.',
+          'Randevu için sağlık bilgisi istenmez. Sağlık bilgilerinin site üzerinden paylaşılmaması önerilir.',
         ]}
       />
 
-      <LH2>Yapay zekâ asistanı (Arise)</LH2>
+      <LH2>Yapay zeka asistanı (Arise)</LH2>
       <LP>
-        Sitedeki asistan, Dr. Ömer Özdemir ve hizmetleri hakkında genel bilgi vermek için tasarlanmış bir yapay zekâ
-        programıdır; gerçek bir hekim değildir ve tanı koyamaz. Yazdığınız mesajlar yanıt üretilebilmesi için yapay
-        zekâ hizmet sağlayıcısına iletilir. Bu yüzden asistana ad, telefon veya sağlık bilgisi yazmamanızı rica ederiz.
+        Sitedeki asistan Dr. Ömer Özdemir ve hizmetleri hakkında genel bilgi vermek için tasarlanmış bir yapay zeka
+        programıdır. Hekim değildir ve tanı koyamaz. Yazılan mesajlar yanıt üretilebilmesi için yapay zeka hizmet
+        sağlayıcısına iletilir. Bu nedenle asistana ad, telefon ya da sağlık bilgisi yazılmaması önerilir.
       </LP>
 
       <LH2>Sağlık içerikleri</LH2>
       <LP>
-        Sitedeki tedavi ve bilgi sayfaları genel bilgilendirme amaçlıdır; kişiye özel tanı veya tedavi önerisi yerine
-        geçmez. Çocuğunuzun durumu için muayene gerekir.
+        Sitedeki tedavi ve bilgi sayfaları genel bilgilendirme amaçlıdır ve kişiye özel tanı ya da tedavi önerisi
+        yerine geçmez. Çocuğunuzun durumu için muayene gerekmektedir.
       </LP>
 
       <LH2>Üçüncü taraf bağlantılar</LH2>

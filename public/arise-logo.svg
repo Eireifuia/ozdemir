@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Arise">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b5f9f"/>
+      <stop offset="1" stop-color="#0d2237"/>
+    </linearGradient>
+    <linearGradient id="tooth" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d6e9f8"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="30" fill="url(#bg)"/>
+  <!-- diş -->
+  <path d="M64 38
+           C58 31 45 30 39 40
+           C34 49 38 60 41 70
+           C43 78 43 90 47 98
+           C49 102 54 102 56 97
+           C58 91 59 84 64 84
+           C69 84 70 91 72 97
+           C74 102 79 102 81 98
+           C85 90 85 78 87 70
+           C90 60 94 49 89 40
+           C83 30 70 31 64 38 Z"
+        fill="url(#tooth)"/>
+  <!-- gülümseme -->
+  <path d="M54 62 Q64 71 74 62" fill="none" stroke="#1b5f9f" stroke-width="3.4" stroke-linecap="round"/>
+  <!-- yükselen parıltı -->
+  <path d="M96 14 L99 24 L109 27 L99 30 L96 40 L93 30 L83 27 L93 24 Z" fill="#6fb7e9"/>
+  <path d="M33 22 L34.8 27.2 L40 29 L34.8 30.8 L33 36 L31.2 30.8 L26 29 L31.2 27.2 Z" fill="#e56f7b"/>
+</svg>

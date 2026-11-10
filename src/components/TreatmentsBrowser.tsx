@@ -59,7 +59,7 @@ export default function TreatmentsBrowser() {
                 <h3 className="font-serif text-lg text-ink leading-snug mb-2">{t.title}</h3>
                 <p className="text-sm text-ink-soft leading-relaxed mb-4">{t.summary}</p>
                 <span className="inline-flex items-center gap-1 text-xs font-medium text-mint group-hover:text-ink transition-colors">
-                  Detaylı Bilgi <ArrowRight className="w-3 h-3" />
+                  Ayrıntıları İnceleyiniz <ArrowRight className="w-3 h-3" />
                 </span>
               </div>
             </Link>

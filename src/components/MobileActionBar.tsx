@@ -40,7 +40,7 @@ export default function MobileActionBar() {
         <div className="mx-3 mb-2 rounded-3xl bg-white border border-ink/10 shadow-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-medium uppercase tracking-[0.18em] text-mint">
-              {panel === 'ara' ? 'Hangi kliniği arayalım?' : 'Hangi klinikle yazışalım?'}
+              {panel === 'ara' ? 'Aramak istediğiniz kliniği seçiniz' : 'Yazmak istediğiniz kliniği seçiniz'}
             </span>
             <button
               type="button"

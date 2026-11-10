@@ -60,9 +60,18 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
   if (!treatment) notFound();
 
   const hasStepImages = treatment.steps.some((s) => s.image);
-  const stepLightbox = treatment.steps
-    .filter((s): s is typeof s & { image: string } => Boolean(s.image))
-    .map((s) => ({ src: s.image, alt: s.imageAlt ?? s.title, caption: s.title }));
+  const stepLightbox = treatment.steps.flatMap((s) => {
+    const list: { src: string; alt: string; caption: string }[] = [];
+    if (s.image) list.push({ src: s.image, alt: s.imageAlt ?? s.title, caption: s.title });
+    if (s.extraImage) {
+      list.push({
+        src: s.extraImage,
+        alt: s.extraImageAlt ?? s.title,
+        caption: s.extraImageCaption ? `${s.title} (${s.extraImageCaption})` : s.title,
+      });
+    }
+    return list;
+  });
   const categoryLabel = treatmentCategories.find((c) => c.id === treatment.category)?.label;
   // Önce aynı kategoriden, sonra diğerlerinden 3 öneri
   const others = [
@@ -128,7 +137,7 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
                   href="/tedaviler"
                   className="rounded-full border border-cream/25 text-cream text-sm font-medium px-7 py-3.5 hover:bg-cream/10 transition-colors"
                 >
-                  Tüm Tedaviler
+                  Tüm Tedavileri İnceleyiniz
                 </Link>
               </div>
             </FadeIn>
@@ -182,20 +191,37 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
                       </ul>
                     )}
                   </div>
+                  {section.images && section.images.length > 0 && (
+                    <div
+                      className={`mt-6 grid gap-4 ${
+                        section.images.length > 1 ? 'sm:grid-cols-2' : ''
+                      }`}
+                    >
+                      {section.images.map((img) => (
+                        <figure
+                          key={img.src}
+                          className="rounded-3xl overflow-hidden bg-white border border-ink/5 shadow-md"
+                        >
+                          <Image
+                            src={img.src}
+                            alt={img.alt}
+                            width={1600}
+                            height={900}
+                            sizes="(min-width: 768px) 45vw, 90vw"
+                            className="w-full h-auto"
+                          />
+                          {img.caption && (
+                            <figcaption className="px-4 py-3 text-xs text-ink-soft leading-relaxed">
+                              {img.caption}
+                            </figcaption>
+                          )}
+                        </figure>
+                      ))}
+                    </div>
+                  )}
                 </FadeIn>
               ))}
             </div>
-            <aside className="mt-16 rounded-2xl bg-cream-alt border border-ink/5 px-6 py-5 text-sm leading-relaxed">
-              <p className="text-ink-soft mb-3">
-                Bu sayfa genel bilgilendirme amaçlıdır; kişiye özel tanı veya tedavi önerisi yerine geçmez.
-                Çocuğunuzun durumu için muayene gerekir.
-              </p>
-              <p className="text-ink">
-                <span className="font-medium">Yazar:</span> Dr. Ömer Özdemir, çocuk diş hekimi
-                <span aria-hidden className="mx-2 text-ink-soft">·</span>
-                <span className="font-medium">İçerik son gözden geçirme:</span> {contentUpdatedLabel}
-              </p>
-            </aside>
           </div>
         </section>
 
@@ -205,7 +231,7 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
             <FadeIn className="max-w-2xl mb-12">
               <Eyebrow>{treatment.stepsEyebrow ?? 'Süreç'}</Eyebrow>
               <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
-                {treatment.stepsHeading ?? 'Randevuda neler oluyor?'}
+                {treatment.stepsHeading ?? 'Randevuda neler olmaktadır?'}
               </h2>
             </FadeIn>
             {hasStepImages ? (
@@ -222,20 +248,45 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
                         className={imageFirst ? '' : 'md:order-2'}
                       >
                         {step.image ? (
-                          <LightboxTrigger
-                            images={stepLightbox}
-                            index={stepLightbox.findIndex((l) => l.src === step.image)}
-                            className="block w-full rounded-3xl overflow-hidden bg-white border border-ink/5 shadow-md hover:shadow-xl transition-shadow duration-300"
-                          >
-                            <Image
-                              src={step.image}
-                              alt={step.imageAlt ?? step.title}
-                              width={1600}
-                              height={900}
-                              sizes="(min-width: 768px) 45vw, 90vw"
-                              className="w-full h-auto"
-                            />
-                          </LightboxTrigger>
+                          <div className="space-y-4">
+                            <LightboxTrigger
+                              images={stepLightbox}
+                              index={stepLightbox.findIndex((l) => l.src === step.image)}
+                              className="block w-full rounded-3xl overflow-hidden bg-white border border-ink/5 shadow-md hover:shadow-xl transition-shadow duration-300"
+                            >
+                              <Image
+                                src={step.image}
+                                alt={step.imageAlt ?? step.title}
+                                width={1600}
+                                height={900}
+                                sizes="(min-width: 768px) 45vw, 90vw"
+                                className="w-full h-auto"
+                              />
+                            </LightboxTrigger>
+                            {step.extraImage ? (
+                              <figure>
+                                <LightboxTrigger
+                                  images={stepLightbox}
+                                  index={stepLightbox.findIndex((l) => l.src === step.extraImage)}
+                                  className="block w-full rounded-3xl overflow-hidden bg-white border border-ink/5 shadow-md hover:shadow-xl transition-shadow duration-300"
+                                >
+                                  <Image
+                                    src={step.extraImage}
+                                    alt={step.extraImageAlt ?? step.title}
+                                    width={1600}
+                                    height={1200}
+                                    sizes="(min-width: 768px) 45vw, 90vw"
+                                    className="w-full h-auto"
+                                  />
+                                </LightboxTrigger>
+                                {step.extraImageCaption ? (
+                                  <figcaption className="mt-2 text-center text-sm text-ink-soft">
+                                    {step.extraImageCaption}
+                                  </figcaption>
+                                ) : null}
+                              </figure>
+                            ) : null}
+                          </div>
                         ) : (
                           <div className="rounded-3xl bg-white border border-ink/5 aspect-[4/3] flex items-center justify-center">
                             <span className="font-serif text-6xl text-mint-light">
@@ -278,6 +329,42 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
                 ))}
               </div>
             )}
+
+            {treatment.compare && (
+              <FadeIn className="mt-16 md:mt-24">
+                <div className="max-w-2xl mb-8">
+                  <h3 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-3">
+                    {treatment.compare.heading ?? 'Önce ve sonra'}
+                  </h3>
+                  {treatment.compare.text && (
+                    <p className="text-ink-soft leading-relaxed">{treatment.compare.text}</p>
+                  )}
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
+                  {[
+                    { label: 'Önce', ...treatment.compare.before },
+                    { label: 'Sonra', ...treatment.compare.after },
+                  ].map((item) => (
+                    <figure
+                      key={item.label}
+                      className="relative rounded-3xl overflow-hidden bg-white border border-ink/5 shadow-md"
+                    >
+                      <Image
+                        src={item.image}
+                        alt={item.alt}
+                        width={1600}
+                        height={900}
+                        sizes="(min-width: 640px) 45vw, 90vw"
+                        className="w-full h-auto"
+                      />
+                      <figcaption className="absolute top-3 left-3 rounded-full bg-white/95 text-ink text-xs font-medium tracking-[0.12em] uppercase px-3.5 py-1.5 shadow-sm">
+                        {item.label}
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+              </FadeIn>
+            )}
           </div>
         </section>
 
@@ -305,7 +392,7 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
               href="/sss"
               className="inline-block mt-6 text-sm font-medium text-mint hover:text-ink transition-colors"
             >
-              Tüm sık sorulan sorular →
+              Tüm Sık Sorulan Soruları İnceleyiniz
             </Link>
 
             {relatedGuides.length > 0 && (
@@ -336,11 +423,10 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20">
             <FadeIn className="max-w-2xl mb-10">
               <h2 className="font-serif text-2xl md:text-3xl leading-tight mb-3">
-                İlk randevu için bir mesaj yeterli
+                İlk randevu için bir mesaj göndermeniz yeterlidir
               </h2>
               <p className="text-cream/65 leading-relaxed">
-                Hangi yakada olursanız olun, size yakın kliniği arayabilir ya da WhatsApp&apos;tan
-                yazabilirsiniz.
+                Size yakın kliniği arayabilir ya da WhatsApp&apos;tan yazabilirsiniz.
               </p>
             </FadeIn>
             <div className="grid md:grid-cols-2 gap-5">
@@ -395,7 +481,7 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
                 href="/tedaviler"
                 className="text-sm font-medium text-mint hover:text-ink transition-colors"
               >
-                Tüm Tedaviler →
+                Tüm Tedavileri İnceleyiniz
               </Link>
             </FadeIn>
             <div className="grid sm:grid-cols-3 gap-5">
@@ -408,7 +494,7 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
                     <h3 className="font-serif text-lg text-ink mb-2 leading-snug">{t.title}</h3>
                     <p className="text-sm text-ink-soft leading-relaxed mb-4">{t.summary}</p>
                     <span className="inline-flex items-center gap-1 text-xs font-medium text-mint">
-                      Detaylı Bilgi <ArrowRight className="w-3 h-3" />
+                      Ayrıntıları İnceleyiniz <ArrowRight className="w-3 h-3" />
                     </span>
                   </Link>
                 </FadeIn>
@@ -416,6 +502,15 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
             </div>
           </div>
         </section>
+
+        {/* Bilgilendirme notu */}
+        <div className="bg-cream">
+          <p className="max-w-3xl mx-auto px-4 md:px-8 pb-10 text-xs text-ink-soft/80 leading-relaxed text-center">
+            Bu sayfa genel bilgilendirme amaçlıdır ve kişiye özel tanı veya tedavi önerisi yerine geçmez. Çocuğunuzun durumu için
+            muayene gerekmektedir. Sayfanın yazarı çocuk diş hekimi Dr. Ömer Özdemir&apos;dir. İçerik en son {contentUpdatedLabel}{" "}
+            tarihinde gözden geçirilmiştir.
+          </p>
+        </div>
       </main>
       <Footer />
     </div>

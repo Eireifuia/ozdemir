@@ -32,7 +32,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 className="inline-flex items-center gap-2 text-sm text-cream/60 hover:text-cream transition-colors mb-8"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Blog&apos;a Dön
+                Blog&apos;a Dönünüz
               </Link>
               <div className="text-xs text-cream/50 mb-3">
                 <span>{post.date}</span>

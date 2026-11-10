@@ -52,3 +52,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# gorsel arsivi ve gecici dosyalar
+/gorsel-arsiv/
+/2.jpeg
+/docs/

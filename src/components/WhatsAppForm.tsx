@@ -30,7 +30,7 @@ export default function WhatsAppForm() {
       className="space-y-4"
     >
       <fieldset>
-        <legend className="text-sm font-medium text-ink mb-2">Hangi klinik?</legend>
+        <legend className="text-sm font-medium text-ink mb-2">Klinik seçiniz</legend>
         <div className="grid sm:grid-cols-2 gap-2">
           {clinics.map((c) => (
             <label
@@ -45,7 +45,7 @@ export default function WhatsAppForm() {
                 value={c.id}
                 checked={clinicId === c.id}
                 onChange={() => setClinicId(c.id)}
-                className="mt-1 accent-[#8a5c45]"
+                className="mt-1 accent-[#1b5f9f]"
               />
               <span className="text-sm leading-snug">
                 <span className="block text-[11px] uppercase tracking-[0.15em] text-ink-soft">{c.side}</span>
@@ -87,8 +87,8 @@ export default function WhatsAppForm() {
       </div>
 
       <p className="text-xs text-ink-soft leading-relaxed">
-        Mesajınız sitemizde saklanmaz; WhatsApp üzerinden doğrudan kliniğe iletilir. Lütfen tanı, ilaç, rapor gibi
-        sağlık bilgilerinizi bu mesajda paylaşmayınız, bunları randevuda hekime iletebilirsiniz.{' '}
+        Mesajınız bu sitede saklanmaz ve WhatsApp üzerinden doğrudan kliniğe iletilir. Tanı, ilaç ya da rapor gibi
+        sağlık bilgilerinizi bu mesajda paylaşmayınız. Bu bilgileri randevuda hekime iletebilirsiniz.{' '}
         <Link href="/kvkk-aydinlatma-metni" className="text-mint underline underline-offset-2">
           KVKK Aydınlatma Metni
         </Link>

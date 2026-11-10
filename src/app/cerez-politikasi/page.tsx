@@ -19,27 +19,27 @@ export default function CerezPage() {
         Bu site, reklam, istatistik veya takip amaçlı çerez kullanmaz.
       </LP>
 
-      <LH2>Üçüncü taraf içerik: Google Haritalar</LH2>
+      <LH2>Üçüncü taraf içerik olarak Google Haritalar</LH2>
       <LP>
         Ana sayfadaki ve iletişim sayfasındaki haritalar Google tarafından sunulur. Bu sayfalar açıldığında harita
-        yüklenir; bu sırada Google tarayıcınıza çerez yerleştirebilir ve IP adresiniz dâhil bazı teknik bilgilere
-        erişebilir. Bu işleme Google&apos;ın gizlilik politikası uygulanır. Haritaları istemiyorsanız tarayıcınızdan
-        üçüncü taraf çerezlerini engelleyebilirsiniz; adresler ve harita bağlantıları metin olarak da verilmiştir.
+        yüklenir ve bu sırada Google tarayıcıya çerez yerleştirebilir ya da IP adresi dahil bazı teknik bilgilere
+        erişebilir. Bu işleme Google&apos;ın gizlilik politikası uygulanır. Haritalar istenmiyorsa tarayıcı
+        ayarlarından üçüncü taraf çerezleri engellenebilir. Adresler ve harita bağlantıları metin olarak da
+        verilmiştir.
       </LP>
 
-      <LH2>Sitenin kendi teknik çalışması</LH2>
+      <LH2>Sitenin teknik çalışması</LH2>
       <LUL
         items={[
-          'Yazı tipleri (Montserrat, Open Sans) kendi sunucumuzdan sunulur.',
-          'Sayfa görüntülenme sayacı yalnızca sayfa başına toplam sayı tutar, çerez kullanmaz.',
+          'Yazı tipleri (Montserrat ve Open Sans) site sunucusundan sunulur.',
           'Görsel ve stil dosyaları site sunucusundan yüklenir.',
         ]}
       />
 
       <LH2>Tercihleriniz</LH2>
       <LP>
-        Tarayıcınızın ayarlarından çerezleri silebilir veya engelleyebilirsiniz. Harita yüklendikten sonra Google
-        çerezlerini silmek için tarayıcı ayarlarındaki “çerezleri temizle” seçeneğini kullanabilirsiniz.
+        Tarayıcı ayarlarından çerezler silinebilir ya da engellenebilir. Harita yüklendikten sonra Google çerezlerini
+        silmek için tarayıcı ayarlarındaki çerezleri temizleme seçeneği kullanılabilir.
       </LP>
 
       <LH2>Daha fazla bilgi</LH2>

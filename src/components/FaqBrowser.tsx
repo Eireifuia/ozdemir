@@ -77,7 +77,7 @@ export default function FaqBrowser({ groups }: { groups: FaqGroup[] }) {
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Soru ara: flor, kanal, dolgu, dil bağı..."
+          placeholder="Konu yazınız. Örneğin flor, kanal ya da dil bağı"
           aria-label="Sorularda ara"
           className="w-full rounded-full bg-white border border-ink/10 text-ink placeholder:text-ink-soft/70 pl-12 pr-5 py-3.5 focus:outline-none focus:border-mint/60 transition-colors"
         />

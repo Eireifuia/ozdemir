@@ -19,6 +19,12 @@ const nextConfig: NextConfig = {
     return [
       { source: "/ozgecmis", destination: "/hakkinda", permanent: true },
       { source: "/contact", destination: "/iletisim", permanent: true },
+      { source: "/tedaviler/yer-tutucular", destination: "/tedaviler/cocuklarda-dis-cekimi-yer-tutucu", permanent: true },
+      { source: "/tedaviler/yer-tutucu-band-loop-crown-loop", destination: "/tedaviler/cocuklarda-dis-cekimi-yer-tutucu", permanent: true },
+      { source: "/tedaviler/yer-tutucu-lingual-ark-nance-tpa", destination: "/tedaviler/cocuklarda-dis-cekimi-yer-tutucu", permanent: true },
+      { source: "/tedaviler/yer-tutucu-distal-shoe-hareketli", destination: "/tedaviler/cocuklarda-dis-cekimi-yer-tutucu", permanent: true },
+      { source: "/tedaviler/dolayli-pulpa-kaplamasi", destination: "/tedaviler/kuafaj-tedavileri", permanent: true },
+      { source: "/tedaviler/dogrudan-pulpa-kaplamasi", destination: "/tedaviler/kuafaj-tedavileri", permanent: true },
     ];
   },
   async headers() {

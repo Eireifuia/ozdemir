@@ -3,10 +3,10 @@
 import { WorldMap, type Data, type ISOCode } from 'react-svg-worldmap';
 import { allVisited } from '@/data/travel';
 
-const MINT = '#1F5B3F';
-const MINT_LIGHT = '#D9EFE3';
-const CREAM_ALT = '#F4F1EA';
-const BORDER = '#8A8072';
+const MINT = '#1b5f9f';
+const MINT_LIGHT = '#d6e9f8';
+const CREAM_ALT = '#e8f1f9';
+const BORDER = '#7b93aa';
 
 const data: Data = allVisited.map((place) => ({ country: place.code as ISOCode, value: 1 }));
 

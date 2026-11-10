@@ -11,7 +11,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h2 className="mb-4 font-serif text-lg text-cream">Dr. Ömer Özdemir</h2>
-            <p className="mb-2">E-posta: ozdemirtarikomer@gmail.com</p>
+            <p className="mb-2">
+              <a href="mailto:ozdemirtarikomer@gmail.com" className="hover:text-mint-light transition-colors">
+                ozdemirtarikomer@gmail.com
+              </a>
+            </p>
             <div className="flex mt-4 space-x-4">
               <a href="https://linkedin.com/in/omertarikozdemir" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profili" className="text-cream/80 hover:text-mint-light transition-colors">
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -43,9 +47,9 @@ const Footer = () => {
           </div>
           <div>
             <h3 className="font-serif text-lg text-cream mb-4">Çalışma Saatleri</h3>
-            <p className="mb-2">Pazartesi - Cuma: 10:00 - 19:00</p>
-            <p className="mb-2">Cumartesi: 10:00 - 17:00</p>
-            <p>Pazar: Kapalı</p>
+            <p className="mb-2">Pazartesi - Cuma 10:00 - 19:00</p>
+            <p className="mb-2">Cumartesi 10:00 - 17:00</p>
+            <p>Pazar kapalıdır</p>
           </div>
         </div>
         <div className="border-t border-cream/10 mt-8 pt-4 text-center text-sm">

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
 import { formatAriseIdentityBio, formatAriseCloseContacts } from '@/data/arise';
+import { buildAriseKnowledge } from '@/lib/ariseKnowledge';
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -20,7 +21,7 @@ KLİNİK BİLGİLERİ (iki ayrı klinikte hizmet veriyor):
 - Avrupa Yakası — Osmaniye Ağız ve Diş Sağlığı Polikliniği (Bakırköy): Osmaniye, Ümraniye Sk. No:2/B, 34146 Bakırköy/İstanbul, Telefon/WhatsApp: 0553 888 54 44
 - Anadolu Yakası — Dentalzone Diş Kliniği (Acıbadem): Acıbadem Mahallesi, Acıbadem Caddesi No:195 (Acıbadem Metrobüs Durağı Çıkışı), Acıbadem/Üsküdar, Telefon: 0546 566 96 63
 - Çalışma saatleri: Pazartesi-Cuma 10:00-19:00, Cumartesi 10:00-17:00, Pazar kapalı
-- Sunulan tedaviler: bebek ve çocuk ilk diş muayenesi, flor uygulaması, fissür örtücü, diş taşı ve plak temizliği, çürük (arayüz çürüğü dahil) ve kanal/yarı kanal tedavisi, süt dişi kaplamaları / kuron (paslanmaz çelik kuron ve zirkonyum; halk arasında "diş şapkası" da denir), MIH, diş çekimi ve yer tutucu, diş travması, VR gözlük ile tedavi, genel anestezi/sedasyon altında tedavi, özel gereksinimli çocuklarda diş tedavisi, erken ortodontik müdahale (aparey), diş sıkma/gıcırdatma (bruksizm), bebeklerde dil bağı
+- Sunulan tedaviler: bebek ve çocuk ilk diş muayenesi, flor uygulaması, fissür örtücü, diş taşı ve plak temizliği, çürük (arayüz çürüğü dahil) ve kanal/yarı kanal tedavisi, süt dişi kaplamaları (paslanmaz çelik kuron ve zirkonyum kuron; halk arasında "diş şapkası" da denir), MIH, diş çekimi ve yer tutucu, diş travması, VR gözlük ile tedavi, genel anestezi/sedasyon altında tedavi, erken ortodontik müdahale (aparey), bebeklerde dil bağı. Sitede ayrıca şu konularda bilgilendirme sayfaları vardır: süt dişlerinin yapısı, erken çocukluk çürüğü (biberon çürüğü), gümüş diamin florür, yer tutucu türleri, kuafaj (indirekt ve direkt), pulpotomi (yarı kanal), apeksifikasyon, strip kuron, Hall tekniği, alışkanlık apareyleri, çocuklarda fırçalama ve ağız bakımı
 - Her tedavinin detayı sitede "Tedaviler" sayfasında (/tedaviler) anlatılıyor, ziyaretçiyi oraya yönlendirebilirsin
 
 KURALLAR (KESİNLİKLE UYULACAK):
@@ -43,6 +44,30 @@ YAZIM SESİ (doğal ve samimi dursun, yapay/AI kokmasın):
 - Diş sağlığı/tıbbi konularda mizah çok seyrek ve organik olsun, zorlama benzetme ekleme; amaç eğlendirmek değil, aileyi rahatlatmak (sıcak, sakinleştirici bir ton). Kimlik/hobi/squad gibi diş sağlığı dışı sohbetlerde ise daha rahat, organik bir mizah kullanabilirsin.
 - Emoji varsa ölçülü ve doğal kullan, her cümleye emoji tıkıştırma.`;
 
+const KNOWLEDGE_RULES = `TEDAVİ BİLGİSİ KULLANIMI:
+- Aşağıdaki "SİTE BİLGİSİ" bölümü Ömer'in sitedeki resmi anlatımıdır. Tedavilerle ilgili sorularda önce bunu esas al. Genel tıbbi bilginle çelişirse sitedeki anlatımı kullan.
+- Cevabı sitede bulamazsan genel bilgiyle kısaca yanıtla ve kesin konuşma, muayeneye yönlendir.
+- Konuyla ilgili bir tedavi sayfası varsa cevabın sonunda sayfa adresini ver (örnek: /tedaviler/kuafaj-tedavileri). Her cevapta zorunlu değil, yalnızca ayrıntı isteyen sorularda.
+- Eski adlar: "dolaylı pulpa kaplaması" indirekt kuafaj, "doğrudan pulpa kaplaması" direkt kuafaj, "yarı kanal" ve "amputasyon" ise pulpotomi demektir. Kullanıcı eski adı kullanırsa anla ama cevapta güncel adı kullan.
+- Fiyat, sigorta ya da tedavi süresi gibi sitede yazmayan kesin bilgileri uydurma. "Bu konuda net bilgi yok, kliniği arayabilirsiniz" de.
+- Fiyat sorulursa rakam verme ve kliniği aramalarını söyle. Fiyat bilgisi yalnızca kliniklerden alınır.
+- Klinik bilgileri (Ömer'in onayladığı kesin bilgiler): 14 yaşına kadar (14 yaş dahil) tüm çocuklar muayene edilir. Yaşı 14'ten büyük olan çocuk için "Ömer 14 yaşına kadar çocuklara bakıyor, ayrıntı için kliniği arayabilirsiniz" de, "gelebilir" deme. Sigorta ve özel sağlık sigortası geçerli değildir. Aile çocuğun yanında odaya girebilir. İlk muayene genellikle ücretsizdir, kesin bilgi için kliniğin aranması söylenir.
+- Acil durumda (kaza, şiddetli ağrı, şişlik) kliniği aramasını söyle. Ayrıca Ömer Özdemir'e web sitesindeki iletişim sayfasından (/iletisim) ulaşabileceğini belirt. Gerektiğinde en yakın acil servise gitmesini de ekle.
+- Sohbetin önceki mesajlarındaki bilgileri (çocuğun yaşı, anlatılan şikayet, seçilen klinik gibi) hatırla ve tekrar sorma. Kişi randevu aldığını söylediyse bunu hatırla ama randevuyu sen göremezsin, doğrulayamazsın ve değiştiremezsin. Bunu gerektiğinde açıkça belirt.
+- Sitede bilgisi bulunmayan konularda (diş gıcırdatma ve gece plağı, apeksogenez, rejeneratif endodonti, ektopik sürme, özel gereksinimli çocuklarda tedavi, koruyucu reçine) kesin öneri ya da yöntem söyleme. Genel çerçeveyi bir iki cümleyle ver ve ayrıntı için kliniğe danışmasını söyle.
+- Tedavileri karşılaştırırken (örneğin çelik ve zirkonyum kuron) yalnızca sitedeki bilgiyi kullan, kendi yorumunu ekleme ve birini üstün gösterme. Seçimin muayenede hekim tarafından yapıldığını belirt.
+
+CEVAP BİÇİMİ (bu bölüm yukarıdaki yazım kurallarının önüne geçer):
+- Düz metin yaz. Kalın yazı, yıldız, başlık, madde işareti ve [metin](adres) biçiminde bağlantı kullanma. Sayfa adresini düz yaz (/tedaviler/kuafaj-tedavileri).
+- En fazla 4 kısa cümle ve yaklaşık 60 kelime yaz. Bu sınırı aşma. Kısa soruya kısa cevap ver, ek bilgi sorulmadıkça tek konuda dur.
+- Karşındakine her zaman "siz" diye hitap et. "sen", "senin", "gerek yok" gibi sen kalıpları kullanma ("endişe etmenize gerek yok" de).
+- Ömer'in unvanı: diş hekimi ve pedodonti doktora öğrencisi. "Uzman", "uzmanlaşan" ya da "profesör" deme.
+- Soruya doğrudan cevapla başla. "Çocuğunuza ilgi gösterdiğiniz için teşekkürler" gibi giriş cümleleri yazma.
+- "Biz", "kliniğimiz", "bizi arayın" deme. Klinikleri üçüncü ağızdan an ("Ömer'in kliniklerini arayabilirsiniz").
+- Telefon numaralarını yalnızca randevu, acil durum ya da iletişim sorulduğunda ver. Her cevabın sonuna ekleme.
+- Selamlamayı yalnızca sohbetin ilk mesajında yap. "Ben Arise" cümlesini her cevapta tekrarlama.
+- Cevap vermeden önce "iyi gelsin" gibi kalıp sözler ekleme.`;
+
 const RATE_LIMIT = 15;
 const WINDOW_MS = 10 * 60 * 1000;
 const rateLimitMap = new Map<string, number[]>();
@@ -58,7 +83,13 @@ function isRateLimited(ip: string): boolean {
 type IncomingMessage = { role: 'user' | 'assistant'; content: string };
 
 function stripDashes(text: string): string {
-  return text.replace(/\s*[—–]\s*/g, ', ');
+  return text
+    .replace(/\s*[—–]\s*/g, ', ')
+    // Sitede şapkalı harf kullanılmaz
+    .replace(/â/g, 'a')
+    .replace(/Â/g, 'A')
+    .replace(/î/g, 'i')
+    .replace(/û/g, 'u');
 }
 
 export async function POST(req: NextRequest) {
@@ -76,7 +107,7 @@ export async function POST(req: NextRequest) {
     const incoming: unknown = body?.messages;
 
     const messages = (Array.isArray(incoming) ? incoming : [])
-      .slice(-12)
+      .slice(-24)
       .filter(
         (m): m is IncomingMessage =>
           !!m &&
@@ -93,7 +124,10 @@ export async function POST(req: NextRequest) {
     const response = await anthropic.messages.create({
       model: 'claude-haiku-4-5',
       max_tokens: 400,
-      system: SYSTEM_PROMPT,
+      system: [
+        { type: 'text', text: `${SYSTEM_PROMPT}\n\n${KNOWLEDGE_RULES}` },
+        { type: 'text', text: `SİTE BİLGİSİ:\n${buildAriseKnowledge()}`, cache_control: { type: 'ephemeral' } },
+      ],
       messages,
     });
 

@@ -14,7 +14,7 @@ import { provincePlateCodes, visitedProvinceNames } from '@/data/turkeyProvinces
 const visitedPlateCodes = visitedProvinceNames.map((name) => provincePlateCodes[name]);
 
 export const metadata: Metadata = {
-  title: 'Hakkında | Çocuk Diş Hekimi Dr. Ömer Özdemir',
+  title: 'Hakkımda | Çocuk Diş Hekimi Dr. Ömer Özdemir',
   description:
     'Dr. Ömer Özdemir: eğitim, pedodonti (çocuk diş hekimliği) alanındaki akademik çalışmalar, uluslararası deneyim ve çalıştığı klinikler.',
   alternates: { canonical: '/hakkinda' },
@@ -52,14 +52,14 @@ export default function HakkindaPage() {
               </p>
               <p className="text-cream/65 leading-relaxed max-w-md">
                 Çocuk diş hekimi. İstanbul Üniversitesi Diş Hekimliği Fakültesi&apos;nde
-                Pedodonti alanında akademik çalışmalarını yürütüyor, klinik pratiğini ise
-                İstanbul&apos;daki iki kliniğinde sürdürüyor. Tek bir hedefi var: dünyanın
-                dört bir yanındaki çocukları güldürmek. 💙
+                Pedodonti alanında akademik çalışmalarını yürütmekte ve klinik pratiğini
+                İstanbul&apos;daki iki klinikte sürdürmektedir. Çocukların diş hekimine
+                korkusuz bir deneyimle gelebilmesi çalışmalarının temel amacıdır.
               </p>
             </FadeIn>
             <FadeIn direction="right" delay={150} className="relative">
               <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-cream-alt">
-                <Image src="/doctor/dr-pembe-panter-sade.jpg" alt="Dr. Ömer Özdemir" fill sizes="(min-width: 768px) 45vw, 100vw" style={{ objectFit: 'cover', objectPosition: 'center 30%' }} priority />
+                <Image src="/doctor/dr-acik-gri.webp" alt="Dr. Ömer Özdemir" fill sizes="(min-width: 768px) 45vw, 100vw" style={{ objectFit: 'cover', objectPosition: 'center 18%' }} priority />
               </div>
             </FadeIn>
           </div>
@@ -69,36 +69,35 @@ export default function HakkindaPage() {
         <section className="bg-cream">
           <FadeIn className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
             <div className="max-w-3xl">
-              <Eyebrow>Hakkında</Eyebrow>
+              <Eyebrow>Hakkımda</Eyebrow>
               <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-6">
-                Klinik deneyim, bilimsel araştırmayla bir arada
+                Eğitim ve klinik çalışmalar
               </h2>
               <div className="space-y-4">
                 <p className="text-ink-soft leading-relaxed">
                   İstanbul Üniversitesi Diş Hekimliği Fakültesi&apos;ndeki eğitimini 2017-2022
-                  yılları arasında tamamlamış, 2020-2022 yılları arasında ise aynı üniversitenin
+                  yılları arasında tamamlamıştır. 2020-2022 yılları arasında aynı üniversitenin
                   Sağlık Kurumları İşletmeciliği bölümünde önlisans eğitimi almıştır. 2023
-                  yılında İstanbul Üniversitesi Diş Hekimliği Fakültesi Pedodonti (Çocuk Diş
-                  Hekimliği) Anabilim Dalı&apos;nda başladığı doktora eğitimine halen devam
-                  etmekte olup, eğitimini 2027 yılında tamamlaması beklenmektedir.
+                  yılında Pedodonti (Çocuk Diş Hekimliği) Anabilim Dalı&apos;nda başladığı doktora
+                  eğitimine devam etmektedir ve eğitimin 2027 yılında tamamlanması
+                  beklenmektedir.
                 </p>
                 <p className="text-ink-soft leading-relaxed">
-                  Doktora çalışmaları kapsamında, Japonya&apos;nın en iyi dört üniversitesinden
-                  biri olan Kyushu University&apos;de 1 yıl boyunca misafir araştırmacı olarak
-                  bulunmuştur. Bunun yanı sıra Erasmus+ programı kapsamında Belçika&apos;nın Genk
-                  şehrindeki Whitecenter Belgie&apos;de klinik staj yapmıştır.
+                  Doktora çalışmaları kapsamında Japonya&apos;daki Kyushu University&apos;de bir yıl
+                  boyunca misafir araştırmacı olarak bulunmuştur. Erasmus+ programı kapsamında
+                  Belçika&apos;nın Genk şehrindeki Whitecenter Belgie&apos;de klinik staj
+                  tamamlamıştır.
                 </p>
                 <p className="text-ink-soft leading-relaxed">
-                  Eğitim hayatı boyunca gönüllülük çalışmalarına da önem vermiş; 2018 yılında
-                  Assalam Community Foundation bünyesinde Tanzanya&apos;nın Zanzibar bölgesinde
-                  kadın ve çocuklara yönelik gönüllü sağlık hizmeti, 2019 yılında ise Volunteers
-                  of Turkish ile Nijer&apos;in Aguié bölgesinde gönüllü diş hekimliği hizmeti
-                  vermiştir.
+                  Eğitim hayatı boyunca gönüllülük çalışmalarında da yer almıştır. 2018 yılında
+                  Assalam Community Foundation ile Zanzibar&apos;da kadınlara ve çocuklara gönüllü
+                  sağlık hizmeti vermiştir. 2019 yılında Volunteers of Turkish ile Nijer&apos;in
+                  Aguié bölgesinde gönüllü diş hekimliği hizmeti sunmuştur.
                 </p>
                 <p className="text-ink-soft leading-relaxed">
-                  İleri düzey İngilizce, Japonca (N4) ve Türk İşaret Dili (A2) bilgisine sahip
-                  olan Dr. Ömer Özdemir, halen İstanbul&apos;da hem Avrupa hem Anadolu
-                  yakasındaki kliniklerinde çocuk hastalarına hizmet vermektedir.
+                  Dr. Ömer Özdemir ileri düzey İngilizce, Japonca (N4) ve Türk İşaret Dili (A2)
+                  bilgisine sahiptir. Avrupa ve Anadolu yakasındaki kliniklerde çocuk hastalara
+                  hizmet vermektedir.
                 </p>
               </div>
             </div>
@@ -110,7 +109,7 @@ export default function HakkindaPage() {
           <FadeIn className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
             <Eyebrow>Eğitim</Eyebrow>
             <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-10">
-              Akademik Geçmiş
+              Akademik geçmiş
             </h2>
             <div className="divide-y divide-ink/10 border-t border-ink/10">
               {education.map((item) => (
@@ -149,7 +148,7 @@ export default function HakkindaPage() {
             <FadeIn direction="right" delay={150}>
               <Eyebrow>Diller</Eyebrow>
               <h2 className="font-serif text-xl md:text-2xl text-ink leading-tight mb-4">
-                Yabancı Diller
+                Yabancı diller
               </h2>
               <div className="divide-y divide-ink/10 border-t border-ink/10">
                 {languages.map((lang) => (
@@ -169,7 +168,7 @@ export default function HakkindaPage() {
             <FadeIn>
               <Eyebrow>Uluslararası Deneyim</Eyebrow>
               <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-10">
-                Yurt Dışı Deneyimler ve Stajlar
+                Yurt dışı deneyimler ve stajlar
               </h2>
             </FadeIn>
             <div className="grid sm:grid-cols-2 gap-x-10 gap-y-10">
@@ -192,7 +191,7 @@ export default function HakkindaPage() {
             <FadeIn>
               <Eyebrow>Gezdiği Yerler</Eyebrow>
               <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-10">
-                Dünya Haritası
+                Dünya haritası
               </h2>
             </FadeIn>
 

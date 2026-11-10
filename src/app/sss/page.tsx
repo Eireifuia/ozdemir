@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Sık Sorulan Sorular | Çocuk Diş Hekimi Dr. Ömer Özdemir',
     description:
-      'Çocuk diş tedavileri ve randevu hakkında ailelerin en çok sorduğu soruların cevapları.',
+      'Çocuk diş tedavileri ve randevu hakkında ailelerin sık sorduğu soruların cevapları.',
     locale: 'tr_TR',
     type: 'website',
   },
@@ -40,7 +40,7 @@ export default function SssPage() {
   const groups: FaqGroup[] = [
     {
       id: 'genel',
-      title: 'Randevu ve Klinikler',
+      title: 'Randevu ve klinikler',
       categoryId: 'genel',
       categoryLabel: 'Genel',
       items: generalFaq,
@@ -85,7 +85,7 @@ export default function SssPage() {
               <RevealText text="Merak edilenler" />
             </h1>
             <p className="text-cream/65 leading-relaxed mt-4 max-w-lg">
-              Tedavi sayfalarındaki sorular tek sayfada toplandı. Konuya göre süzebilir ya da
+              Tedavi sayfalarındaki sorular tek sayfada toplanmıştır. Konuya göre süzebilir ya da
               kelime yazarak arayabilirsiniz.
             </p>
           </FadeIn>

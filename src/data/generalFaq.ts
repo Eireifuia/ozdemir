@@ -3,15 +3,15 @@
 
 export const generalFaq: { q: string; a: string }[] = [
   {
-    q: 'Randevuyu nasıl alabilirim?',
-    a: 'Kliniklerden birini arayabilir ya da WhatsApp’tan yazabilirsiniz. Osmaniye Ağız ve Diş Sağlığı Polikliniği (Bakırköy): 0553 888 54 44, Dentalzone Diş Kliniği (Acıbadem): 0546 566 96 63. İletişim sayfasındaki bilgilerle de ulaşabilirsiniz.',
+    q: 'Randevu nasıl alınır?',
+    a: 'Kliniklerden biri aranabilir ya da WhatsApp üzerinden yazılabilir. Bakırköy’deki Osmaniye Ağız ve Diş Sağlığı Polikliniği için 0553 888 54 44 numarası, Acıbadem’deki Dentalzone Diş Kliniği için 0546 566 96 63 numarası kullanılmaktadır. İletişim sayfasındaki bilgilerle de ulaşabilirsiniz.',
   },
   {
-    q: 'Hangi kliniğe gitmeliyim?',
-    a: 'Size yakın olanı seçebilirsiniz. Avrupa Yakası için Bakırköy’deki Osmaniye Ağız ve Diş Sağlığı Polikliniği, Anadolu Yakası için Acıbadem’deki Dentalzone Diş Kliniği hizmet veriyor.',
+    q: 'Hangi kliniği tercih etmeliyim?',
+    a: 'Size yakın olan klinik seçilebilir. Avrupa Yakası için Bakırköy’deki Osmaniye Ağız ve Diş Sağlığı Polikliniği, Anadolu Yakası için Acıbadem’deki Dentalzone Diş Kliniği hizmet vermektedir.',
   },
   {
-    q: 'Klinikler hangi gün ve saatlerde açık?',
-    a: 'Pazartesi - Cuma 10:00 - 19:00, Cumartesi 10:00 - 17:00 saatleri arasında açık, Pazar günleri kapalı. Randevu öncesinde telefonla ya da WhatsApp’tan teyit etmeniz önerilir.',
+    q: 'Klinikler hangi gün ve saatlerde açıktır?',
+    a: 'Klinikler pazartesiden cumaya 10:00 ile 19:00 arasında, cumartesi günü 10:00 ile 17:00 arasında açıktır. Pazar günleri kapalıdır. Randevu öncesinde telefonla ya da WhatsApp üzerinden teyit almanız önerilir.',
   },
 ];

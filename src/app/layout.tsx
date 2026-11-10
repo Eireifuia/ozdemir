@@ -1,21 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { Montserrat, Open_Sans } from "next/font/google";
+import { Bricolage_Grotesque, Figtree } from "next/font/google";
 import "./globals.css";
 import MobileActionBar from "@/components/MobileActionBar";
 import { siteDescription, siteName, siteTitle, siteUrl } from "@/data/site";
 
 // next/font yazı tiplerini derleme sırasında indirip kendi sunucumuzdan sunar;
 // ziyaretçi tarayıcısı Google'a istek göndermez. Türkçe karakterler için latin-ext şart.
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+// Başlıklar karakterli ve sıcak bir grotesk, gövde yumuşak hatlı okunaklı bir sans.
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "500", "600", "700"],
 });
 
-const openSans = Open_Sans({
-  variable: "--font-open-sans",
+const figtree = Figtree({
+  variable: "--font-figtree",
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -45,7 +44,7 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body
-        className={`${montserrat.variable} ${openSans.variable} font-sans antialiased`}
+        className={`${bricolage.variable} ${figtree.variable} font-sans antialiased`}
       >
         <a
           href="#icerik"

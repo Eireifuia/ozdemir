@@ -11,7 +11,7 @@ import { clinics } from '@/data/clinics';
 const links = [
   { href: '/', label: 'Ana Sayfa' },
   { href: '/tedaviler', label: 'Tedaviler' },
-  { href: '/hakkinda', label: 'Hakkında' },
+  { href: '/hakkinda', label: 'Hakkımda' },
   { href: '/blog', label: 'Blog' },
   { href: '/iletisim', label: 'İletişim' },
 ];
@@ -70,11 +70,11 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               <Link href="/" className="flex items-center gap-3">
                 <Image
-                  src="/logonew.png"
+                  src="/oo-monogram.svg"
                   alt="Dr. Ömer Özdemir Logo"
-                  width={56}
-                  height={56}
-                  className="rounded-full object-cover"
+                  width={48}
+                  height={44}
+                  className="object-contain"
                 />
                 <span className="font-serif text-lg text-ink whitespace-nowrap">Dr. Ömer Özdemir</span>
               </Link>
@@ -88,7 +88,7 @@ const Navbar = () => {
                   className="flex items-center gap-2 text-xs text-ink-soft hover:text-mint transition-colors whitespace-nowrap"
                 >
                   <Phone className="w-3.5 h-3.5" />
-                  <span className="hidden xl:inline">Klinikler ve Telefon</span>
+                  <span className="hidden xl:inline">Klinikler ve telefon</span>
                   <span className="xl:hidden">Klinikler</span>
                   <ChevronDown
                     className={`w-3.5 h-3.5 transition-transform duration-200 ${
@@ -170,7 +170,7 @@ const Navbar = () => {
                 className="ml-2 flex items-center gap-2 whitespace-nowrap rounded-full bg-ink pl-2 pr-5 py-2 text-sm font-medium text-cream transition-colors duration-200 hover:bg-mint"
               >
                 <span className="relative w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
-                  <Image src="/Arise.jpg" alt="" fill style={{ objectFit: 'cover' }} />
+                  <Image src="/arise-logo.svg" alt="" fill style={{ objectFit: 'cover' }} />
                 </span>
                 AI Asistan
               </button>
@@ -204,7 +204,7 @@ const Navbar = () => {
                 className="mt-1 flex items-center gap-2 rounded-lg bg-ink px-3 py-2 text-sm font-medium text-cream"
               >
                 <span className="relative w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
-                  <Image src="/Arise.jpg" alt="" fill style={{ objectFit: 'cover' }} />
+                  <Image src="/arise-logo.svg" alt="" fill style={{ objectFit: 'cover' }} />
                 </span>
                 AI Asistan
               </button>
@@ -251,7 +251,7 @@ const Navbar = () => {
           <X className="w-6 h-6 text-cream" />
         ) : (
           <span className="relative w-full h-full rounded-full overflow-hidden">
-            <Image src="/Arise.jpg" alt="AI Asistan" fill style={{ objectFit: 'cover' }} />
+            <Image src="/arise-logo.svg" alt="AI Asistan" fill style={{ objectFit: 'cover' }} />
           </span>
         )}
       </button>
