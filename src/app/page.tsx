@@ -137,7 +137,7 @@ export default async function Home() {
       <main id="icerik">
         {/* Hero */}
         <section className="px-3 md:px-5 pt-2 md:pt-3">
-          <div className="relative overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem] bg-ink text-white grid md:grid-cols-[1.05fr_0.95fr] md:min-h-[700px]">
+          <div className="relative mx-auto max-w-[1440px] overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem] bg-ink text-white grid md:grid-cols-[1.05fr_0.95fr] md:min-h-[700px]">
             <div className="relative z-10 flex items-center px-6 md:px-12 lg:px-16 pt-16 pb-10 md:py-20 order-1">
               <FadeIn className="max-w-xl">
                 <Eyebrow tone="dark">Çocuk Diş Hekimi Dr. Ömer Özdemir</Eyebrow>
