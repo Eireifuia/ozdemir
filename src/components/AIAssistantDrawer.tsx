@@ -31,6 +31,29 @@ const AIAssistantDrawer = ({ isOpen, onClose }: AIAssistantDrawerProps) => {
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  // Mobilde pencere tam ekran olur. Klavye açılınca görünür alanın yüksekliğine uyar,
+  // sayfa zoom yapmaz ve arkadaki sayfa kaymaz.
+  const [viewport, setViewport] = useState<{ height: number; top: number } | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const mq = window.matchMedia('(max-width: 767px)');
+    if (!mq.matches) return;
+    const vv = window.visualViewport;
+    const update = () =>
+      setViewport(vv ? { height: vv.height, top: vv.offsetTop } : { height: window.innerHeight, top: 0 });
+    update();
+    vv?.addEventListener('resize', update);
+    vv?.addEventListener('scroll', update);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      vv?.removeEventListener('resize', update);
+      vv?.removeEventListener('scroll', update);
+      document.body.style.overflow = prevOverflow;
+      setViewport(null);
+    };
+  }, [isOpen]);
 
   // Sohbet yalnızca bu cihazda saklanır. Sayfa yenilense ya da site yeniden açılsa da kaldığı yerden devam eder.
   useEffect(() => {
@@ -127,10 +150,11 @@ const AIAssistantDrawer = ({ isOpen, onClose }: AIAssistantDrawerProps) => {
 
   return (
     <div
-      className={`fixed z-50 bottom-24 right-4 md:bottom-28 md:right-6 w-[calc(100vw-2rem)] max-w-sm h-[70vh] max-h-[560px] bg-white rounded-2xl shadow-2xl border border-black/5 flex flex-col overflow-hidden origin-bottom-right transition-all duration-300 ease-out ${
+      style={viewport ? { height: viewport.height, top: viewport.top } : undefined}
+      className={`fixed z-[70] left-0 right-0 top-0 h-[100dvh] w-full bg-white flex flex-col overflow-hidden transition-opacity duration-300 ease-out md:z-50 md:left-auto md:right-6 md:top-auto md:bottom-28 md:h-[70vh] md:max-h-[560px] md:max-w-sm md:rounded-2xl md:shadow-2xl md:border md:border-black/5 md:origin-bottom-right md:transition-all ${
         isOpen
-          ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
-          : 'opacity-0 scale-95 translate-y-4 pointer-events-none'
+          ? 'opacity-100 pointer-events-auto md:scale-100 md:translate-y-0'
+          : 'opacity-0 pointer-events-none md:scale-95 md:translate-y-4'
       }`}
     >
       {/* Header */}
@@ -212,7 +236,7 @@ const AIAssistantDrawer = ({ isOpen, onClose }: AIAssistantDrawerProps) => {
           onKeyDown={handleKeyPress}
           placeholder="Mesajınızı yazınız"
           disabled={isLoading}
-          className="flex-1 rounded-full bg-white px-4 py-2 text-sm text-ink focus:outline-none disabled:opacity-60"
+          className="flex-1 rounded-full bg-white px-4 py-2 text-base md:text-sm text-ink focus:outline-none disabled:opacity-60"
         />
         <button
           onClick={handleSendMessage}
@@ -223,7 +247,7 @@ const AIAssistantDrawer = ({ isOpen, onClose }: AIAssistantDrawerProps) => {
           <Send className="w-4 h-4" />
         </button>
       </div>
-      <p className="text-[10px] text-ink-soft text-center bg-[#F0F0F0] pb-2 -mt-1">
+      <p className="text-[10px] text-ink-soft text-center bg-[#F0F0F0] pb-[max(0.5rem,env(safe-area-inset-bottom))] -mt-1">
         Bu bir yapay zeka asistanıdır, kesin teşhis için muayene gereklidir. Sohbet yalnızca bu cihazda saklanır.
       </p>
     </div>

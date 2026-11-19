@@ -7,6 +7,7 @@ import FadeIn from '@/components/FadeIn';
 import RevealText from '@/components/RevealText';
 import { blogPosts } from '@/data/blogPosts';
 import { kitchenPhotos } from '@/data/kitchenPhotos';
+import KitchenGallery from '@/components/KitchenGallery';
 
 export const metadata: Metadata = {
   title: 'Blog | Dr. Ömer Özdemir',
@@ -108,28 +109,7 @@ export default function BlogPage() {
                 </p>
               </div>
             ) : (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {kitchenPhotos.map((photo, i) => (
-                  <FadeIn
-                    key={photo.id}
-                    delay={i * 80}
-                    className="group relative aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300"
-                  >
-                    <Image
-                      src={photo.src}
-                      alt={photo.caption ?? ''}
-                      fill
-                      style={{ objectFit: 'cover' }}
-                      className="group-hover:scale-105 transition-transform duration-500"
-                    />
-                    {photo.caption && (
-                      <span className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-ink/70 to-transparent text-cream text-sm p-4 pt-8">
-                        {photo.caption}
-                      </span>
-                    )}
-                  </FadeIn>
-                ))}
-              </div>
+              <KitchenGallery photos={kitchenPhotos} />
             )}
           </div>
         </section>

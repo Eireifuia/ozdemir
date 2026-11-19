@@ -100,6 +100,20 @@ html {
 }
 
 /* Animasyon başlangıç konumları dar ekranda yatay kaydırma oluşturmasın */
+html,
+html,
 body {
   overflow-x: clip;
+}
+
+/* Arise tanitim balonu girisi */
+@keyframes ariseHint {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.arise-hint {
+  animation: ariseHint 0.4s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .arise-hint { animation: none; }
 }

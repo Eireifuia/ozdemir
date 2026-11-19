@@ -53,7 +53,7 @@ export default function FadeIn({ children, className = '', direction = 'up', del
   }, []);
 
   const offset =
-    direction === 'left' ? '-translate-x-6' : direction === 'right' ? 'translate-x-6' : 'translate-y-6';
+    direction === 'left' ? 'max-md:translate-y-6 md:-translate-x-6' : direction === 'right' ? 'max-md:translate-y-6 md:translate-x-6' : 'translate-y-6';
 
   return (
     <div

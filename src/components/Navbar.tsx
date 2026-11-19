@@ -23,6 +23,35 @@ const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [clinicsOpen, setClinicsOpen] = useState(false);
   const clinicsRef = useRef<HTMLDivElement>(null);
+  const [aiHint, setAiHint] = useState(false);
+
+  // Yapay zeka asistanı için kısa tanıtım balonu: ilk ziyarette birkaç saniye sonra çıkar,
+  // kapatılınca ya da asistan açılınca 3 gün boyunca tekrar gösterilmez.
+  const dismissAiHint = () => {
+    setAiHint(false);
+    try {
+      window.localStorage.setItem('arise-ipucu', String(Date.now()));
+    } catch {
+      // yoksay
+    }
+  };
+
+  useEffect(() => {
+    let seenRecently = false;
+    try {
+      const seen = Number(window.localStorage.getItem('arise-ipucu') ?? 0);
+      seenRecently = Date.now() - seen < 3 * 24 * 60 * 60 * 1000;
+    } catch {
+      // yoksay
+    }
+    if (seenRecently) return;
+    const show = setTimeout(() => setAiHint(true), 3500);
+    const hide = setTimeout(() => setAiHint(false), 3500 + 14000);
+    return () => {
+      clearTimeout(show);
+      clearTimeout(hide);
+    };
+  }, []);
 
   // Klinikler paneli: dışarı tıklayınca, Esc ile ve sayfa değişince kapanır
   useEffect(() => {
@@ -241,17 +270,55 @@ const Navbar = () => {
         </div>
       </nav>
 
+      {/* Yapay zeka asistanı tanıtım balonu */}
+      {aiHint && !drawerOpen && (
+        <div
+          role="status"
+          className="fixed z-50 bottom-[9.25rem] right-4 md:bottom-28 md:right-6 max-w-[15.5rem] rounded-2xl rounded-br-md bg-white border border-ink/10 shadow-xl px-4 py-3 arise-hint"
+        >
+          <button
+            type="button"
+            onClick={dismissAiHint}
+            aria-label="Kapat"
+            className="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-ink text-cream flex items-center justify-center shadow"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              dismissAiHint();
+              setDrawerOpen(true);
+            }}
+            className="text-left"
+          >
+            <span className="block text-[11px] font-semibold uppercase tracking-[0.15em] text-mint mb-1">
+              Yapay zeka asistanı
+            </span>
+            <span className="block text-sm text-ink leading-snug">
+              Merhaba, ben Arise. Çocuğunuzun diş sağlığıyla ilgili sorularınızı yanıtlayabilirim.
+            </span>
+          </button>
+        </div>
+      )}
+
       {/* Floating AI assistant bubble */}
       <button
-        onClick={() => setDrawerOpen((prev) => !prev)}
+        onClick={() => {
+          dismissAiHint();
+          setDrawerOpen((prev) => !prev);
+        }}
         aria-label={drawerOpen ? 'AI Asistanı kapat' : 'AI Asistan ile konuş'}
-        className="fixed z-50 bottom-20 right-4 md:bottom-6 md:right-6 w-14 h-14 md:w-16 md:h-16 rounded-full bg-ink shadow-lg hover:bg-mint transition-all duration-200 hover:scale-105 flex items-center justify-center overflow-hidden"
+        className={`fixed z-50 bottom-20 right-4 md:bottom-6 md:right-6 ${drawerOpen ? 'max-md:hidden' : ''} w-14 h-14 md:w-16 md:h-16 rounded-full bg-ink shadow-lg hover:bg-mint transition-all duration-200 hover:scale-105 flex items-center justify-center overflow-hidden`}
       >
         {drawerOpen ? (
           <X className="w-6 h-6 text-cream" />
         ) : (
           <span className="relative w-full h-full rounded-full overflow-hidden">
             <Image src="/arise-logo.svg" alt="AI Asistan" fill style={{ objectFit: 'cover' }} />
+            <span className="absolute bottom-1 left-1/2 -translate-x-1/2 rounded-full bg-white text-ink text-[9px] font-bold leading-4 px-1.5 shadow-sm">
+              AI
+            </span>
           </span>
         )}
       </button>

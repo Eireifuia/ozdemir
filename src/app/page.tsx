@@ -145,7 +145,7 @@ export default async function Home() {
                   <RevealText text="Çocuklar için korkusuz diş hekimliği" />
                 </h1>
                 <p className="text-white/75 text-base md:text-lg leading-relaxed mb-10 max-w-md">
-                  Diş hekimi koltuğu çocuğunuz için korku değil merak uyandıran bir yer olabilmektedir.
+                  Hayatı sevenler kulübü kurucu üyesi
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Link

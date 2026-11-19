@@ -14,10 +14,30 @@ type Panel = 'ara' | 'whatsapp' | null;
 export default function MobileActionBar() {
   const pathname = usePathname();
   const [panel, setPanel] = useState<Panel>(null);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
     setPanel(null);
+    setHidden(false);
   }, [pathname]);
+
+  // Aşağı kaydırırken çubuk gizlenir, yukarı kaydırınca ya da sayfa başında geri gelir.
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y < 120) {
+        setHidden(false);
+      } else if (y > lastY + 8) {
+        setHidden(true);
+      } else if (y < lastY - 8) {
+        setHidden(false);
+      }
+      lastY = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     if (!panel) return;
@@ -32,10 +52,16 @@ export default function MobileActionBar() {
 
   const toggle = (next: Exclude<Panel, null>) => setPanel((p) => (p === next ? null : next));
   const buttonBase =
-    'flex items-center justify-center gap-2 min-h-12 text-sm font-medium transition-colors';
+    'flex items-center justify-center gap-2 min-h-10 text-[13px] font-medium transition-colors';
 
   return (
-    <div className="md:hidden fixed inset-x-0 bottom-0 z-[55]" role="region" aria-label="Hızlı iletişim">
+    <div
+      className={`md:hidden fixed inset-x-0 bottom-0 z-[55] transition-transform duration-300 ${
+        hidden && !panel ? 'translate-y-full' : 'translate-y-0'
+      }`}
+      role="region"
+      aria-label="Hızlı iletişim"
+    >
       {panel && (
         <div className="mx-3 mb-2 rounded-3xl bg-white border border-ink/10 shadow-xl p-4">
           <div className="flex items-center justify-between mb-3">
@@ -79,7 +105,7 @@ export default function MobileActionBar() {
           aria-expanded={panel === 'ara'}
           className={`${buttonBase} bg-ink text-cream hover:bg-mint`}
         >
-          <Phone className="w-4 h-4" aria-hidden />
+          <Phone className="w-3.5 h-3.5" aria-hidden />
           Ara
         </button>
         <button
@@ -88,7 +114,10 @@ export default function MobileActionBar() {
           aria-expanded={panel === 'whatsapp'}
           className={`${buttonBase} text-ink hover:text-mint`}
         >
-          <MessageCircle className="w-4 h-4" aria-hidden />
+          <span className="relative inline-flex w-5 h-5 text-[#25D366]" aria-hidden>
+            <MessageCircle className="w-5 h-5" strokeWidth={2.2} />
+            <Phone className="absolute left-1/2 top-1/2 w-2.5 h-2.5 -translate-x-1/2 -translate-y-[58%]" strokeWidth={2.8} fill="currentColor" />
+          </span>
           WhatsApp
         </button>
       </div>
