@@ -205,7 +205,7 @@ const ui: Record<string, string> = {
   "şehir · 81 il": "都市 · 81県",
   "İçerik en son {date} tarihinde gözden geçirilmiştir.": "この内容は{date}に確認されました。",
   "Daha fazla göster": "もっと見る",
-  "Merhaba, ben Arise. Dr. Ömer Özdemir'in yapay zeka asistanıyım. Çocuklarda diş sağlığıyla ilgili genel sorularınızı yanıtlayabilirim. Kişisel sağlık bilgilerinizi bu sohbette paylaşmayınız.": "こんにちは、Ariseです。Dr. Ömer ÖzdemirのAIアシスタントです。子どもの歯の健康についての一般的なご質問にお答えします。個人の健康情報はこのチャットでは共有しないでください。",
+  "Merhaba, ben Arise. Dr. Ömer Özdemir'in yapay zeka asistanıyım. Çocuklarda diş sağlığıyla ilgili genel sorularınızı yanıtlayabilirim.": "こんにちは、Ariseです。Dr. Ömer ÖzdemirのAIアシスタントです。子どもの歯の健康についての一般的なご質問にお答えします。",
   "WhatsApp": "WhatsApp",
   "Kulübün faaliyet alanı": "クラブの活動領域",
   "Acılı Mantı": "辛いマントゥ",

@@ -21,7 +21,7 @@ const STORAGE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 const MAX_STORED = 40;
 
 const GREETING_TR =
-  'Merhaba, ben Arise. Dr. Ömer Özdemir\'in yapay zeka asistanıyım. Çocuklarda diş sağlığıyla ilgili genel sorularınızı yanıtlayabilirim. Kişisel sağlık bilgilerinizi bu sohbette paylaşmayınız.';
+  'Merhaba, ben Arise. Dr. Ömer Özdemir\'in yapay zeka asistanıyım. Çocuklarda diş sağlığıyla ilgili genel sorularınızı yanıtlayabilirim.';
 
 const greeting = (): Message => ({
   from: 'ai',
