@@ -5,22 +5,26 @@ import Footer from '@/components/Footer';
 import FadeIn from '@/components/FadeIn';
 import RevealText from '@/components/RevealText';
 import FaqBrowser, { type FaqGroup } from '@/components/FaqBrowser';
-import { generalFaq } from '@/data/generalFaq';
-import { treatmentCategories, treatments } from '@/data/treatments';
+import { getT } from '@/i18n/server';
+import { localizedTreatments, localizedCategories, localizedGeneralFaq } from '@/i18n/content';
+import { localeMeta } from '@/i18n/config';
 
-export const metadata: Metadata = {
-  title: 'Sık Sorulan Sorular | Çocuk Diş Hekimi Dr. Ömer Özdemir',
-  description:
-    'Çocuklarda diş tedavisi, flor, fissür örtücü, kanal tedavisi, diş kaplaması, dil bağı ve randevu hakkında sık sorulan sorular ve cevapları. Bakırköy ve Acıbadem çocuk diş hekimi Dr. Ömer Özdemir.',
-  alternates: { canonical: '/sss' },
-  openGraph: {
-    title: 'Sık Sorulan Sorular | Çocuk Diş Hekimi Dr. Ömer Özdemir',
-    description:
-      'Çocuk diş tedavileri ve randevu hakkında ailelerin sık sorduğu soruların cevapları.',
-    locale: 'tr_TR',
-    type: 'website',
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t, locale } = await getT();
+  return {
+    title: t('Sık Sorulan Sorular | Çocuk Diş Hekimi Dr. Ömer Özdemir'),
+    description: t(
+      'Çocuklarda diş tedavisi, flor, fissür örtücü, kanal tedavisi, diş kaplaması, dil bağı ve randevu hakkında sık sorulan sorular ve cevapları. Bakırköy ve Acıbadem çocuk diş hekimi Dr. Ömer Özdemir.'
+    ),
+    alternates: { canonical: '/sss' },
+    openGraph: {
+      title: t('Sık Sorulan Sorular | Çocuk Diş Hekimi Dr. Ömer Özdemir'),
+      description: t('Çocuk diş tedavileri ve randevu hakkında ailelerin sık sorduğu soruların cevapları.'),
+      locale: localeMeta[locale].ogLocale,
+      type: 'website',
+    },
+  };
+}
 
 function Eyebrow({ children, tone = 'light' }: { children: React.ReactNode; tone?: 'light' | 'dark' }) {
   return (
@@ -34,26 +38,29 @@ function Eyebrow({ children, tone = 'light' }: { children: React.ReactNode; tone
   );
 }
 
-export default function SssPage() {
-  const categoryLabel = (id: string) => treatmentCategories.find((c) => c.id === id)?.label ?? id;
+export default async function SssPage() {
+  const { t, locale } = await getT();
+  const treatments = await localizedTreatments(locale);
+  const generalFaq = await localizedGeneralFaq(locale);
+  const categoryLabel = (id: string) => localizedCategories(locale).find((c) => c.id === id)?.label ?? id;
 
   const groups: FaqGroup[] = [
     {
       id: 'genel',
-      title: 'Randevu ve klinikler',
+      title: t('Randevu ve klinikler'),
       categoryId: 'genel',
-      categoryLabel: 'Genel',
+      categoryLabel: t('Genel'),
       items: generalFaq,
     },
     ...treatments
-      .filter((t) => t.faq.length > 0)
-      .map((t) => ({
-        id: t.slug,
-        title: t.title,
-        href: `/tedaviler/${t.slug}`,
-        categoryId: t.category,
-        categoryLabel: categoryLabel(t.category),
-        items: t.faq,
+      .filter((tr) => tr.faq.length > 0)
+      .map((tr) => ({
+        id: tr.slug,
+        title: tr.title,
+        href: `/tedaviler/${tr.slug}`,
+        categoryId: tr.category,
+        categoryLabel: categoryLabel(tr.category),
+        items: tr.faq,
       })),
   ];
 
@@ -80,13 +87,12 @@ export default function SssPage() {
         {/* Hero */}
         <section className="bg-ink text-cream">
           <FadeIn className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20">
-            <Eyebrow tone="dark">Sık Sorulan Sorular</Eyebrow>
+            <Eyebrow tone="dark">{t("Sık Sorulan Sorular")}</Eyebrow>
             <h1 className="font-serif font-light text-4xl md:text-5xl leading-tight max-w-2xl">
-              <RevealText text="Merak edilenler" />
+              <RevealText text={t("Merak edilenler")} />
             </h1>
             <p className="text-cream/65 leading-relaxed mt-4 max-w-lg">
-              Tedavi sayfalarındaki sorular tek sayfada toplanmıştır. Konuya göre süzebilir ya da
-              kelime yazarak arayabilirsiniz.
+              {t("Tedavi sayfalarındaki sorular tek sayfada toplanmıştır. Konuya göre süzebilir ya da kelime yazarak arayabilirsiniz.")}
             </p>
           </FadeIn>
         </section>
@@ -103,17 +109,17 @@ export default function SssPage() {
           <FadeIn className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
             <div className="max-w-md">
               <h2 className="font-serif text-2xl md:text-3xl leading-tight mb-3">
-                Sorunuzun cevabını bulamadınız mı?
+                {t("Sorunuzun cevabını bulamadınız mı?")}
               </h2>
               <p className="text-cream/65 leading-relaxed">
-                Kliniği arayabilir ya da WhatsApp’tan yazabilirsiniz.
+                {t("Kliniği arayabilir ya da WhatsApp’tan yazabilirsiniz.")}
               </p>
             </div>
             <Link
               href="/iletisim"
               className="rounded-full bg-cream text-ink text-sm font-medium px-7 py-3.5 hover:bg-mint-light transition-colors flex-shrink-0"
             >
-              İletişime Geçiniz
+              {t("İletişime Geçiniz")}
             </Link>
           </FadeIn>
         </section>

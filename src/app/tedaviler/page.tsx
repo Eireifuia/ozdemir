@@ -6,13 +6,20 @@ import FadeIn from '@/components/FadeIn';
 import RevealText from '@/components/RevealText';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { getT, localizeData } from '@/i18n/server';
+import { treatmentGuides } from '@/data/treatmentGuides';
+import { localizedTreatments, localizedCategories } from '@/i18n/content';
 
-export const metadata: Metadata = {
-  title: 'Çocuk Diş Tedavileri | Çocuk Diş Hekimi Dr. Ömer Özdemir',
-  description:
-    'Çocuklarda koruyucu bakım, çürük ve kanal tedavisi, diş kaplaması, yer tutucu, diş travması, genel anestezi ve erken ortodonti hakkında bilgiler. Bakırköy ve Acıbadem kliniklerinde çocuk diş hekimi Dr. Ömer Özdemir.',
-  alternates: { canonical: '/tedaviler' },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+  return {
+    title: t('Çocuk Diş Tedavileri | Çocuk Diş Hekimi Dr. Ömer Özdemir'),
+    description: t(
+      'Çocuklarda koruyucu bakım, çürük ve kanal tedavisi, diş kaplaması, yer tutucu, diş travması, genel anestezi ve erken ortodonti hakkında bilgiler. Bakırköy ve Acıbadem kliniklerinde çocuk diş hekimi Dr. Ömer Özdemir.'
+    ),
+    alternates: { canonical: '/tedaviler' },
+  };
+}
 
 function Eyebrow({ children, tone = 'light' }: { children: React.ReactNode; tone?: 'light' | 'dark' }) {
   return (
@@ -26,7 +33,11 @@ function Eyebrow({ children, tone = 'light' }: { children: React.ReactNode; tone
   );
 }
 
-export default function Tedaviler() {
+export default async function Tedaviler() {
+  const { t, locale } = await getT();
+  const treatments = await localizedTreatments(locale);
+  const categories = localizedCategories(locale);
+  const guides = await localizeData('data', 'treatmentGuides', treatmentGuides, locale);
   return (
     <div className="min-h-screen bg-cream">
       <Navbar />
@@ -34,13 +45,12 @@ export default function Tedaviler() {
         {/* Hero */}
         <section className="bg-ink text-cream">
           <FadeIn className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20">
-            <Eyebrow tone="dark">Tedaviler</Eyebrow>
+            <Eyebrow tone="dark">{t("Tedaviler")}</Eyebrow>
             <h1 className="font-serif font-light text-4xl md:text-5xl leading-tight max-w-2xl">
-              <RevealText text="Tedaviler" />
+              <RevealText text={t("Tedaviler")} />
             </h1>
             <p className="text-cream/65 leading-relaxed mt-4 max-w-lg">
-              Çocuklara özel diş tedavilerinin ne zaman gerektiği, nasıl uygulandığı ve ailelerin
-              bilmesi gereken noktalar bu sayfada yer almaktadır.
+              {t("Çocuklara özel diş tedavilerinin ne zaman gerektiği, nasıl uygulandığı ve ailelerin bilmesi gereken noktalar bu sayfada yer almaktadır.")}
             </p>
           </FadeIn>
         </section>
@@ -48,7 +58,7 @@ export default function Tedaviler() {
         {/* Treatments */}
         <section className="bg-white">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-            <TreatmentsBrowser />
+            <TreatmentsBrowser treatments={treatments} categories={categories} />
           </div>
         </section>
 
@@ -56,23 +66,22 @@ export default function Tedaviler() {
         <section className="bg-cream-alt">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
             <FadeIn className="max-w-2xl mb-10">
-              <Eyebrow>Merak Edilenler</Eyebrow>
+              <Eyebrow>{t("Merak Edilenler")}</Eyebrow>
               <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-4">
-                Ailelerin en çok sorduğu sorular
+                {t("Ailelerin en çok sorduğu sorular")}
               </h2>
               <p className="text-ink-soft leading-relaxed">
-                Çocuğunuzun diş sağlığıyla ilgili merak edilen konular ayrıntılı biçimde ele alınmıştır.
-                Başlığa tıklayarak açabilirsiniz.
+                {t("Çocuğunuzun diş sağlığıyla ilgili merak edilen konular ayrıntılı biçimde ele alınmıştır. Başlığa tıklayarak açabilirsiniz.")}
               </p>
               <Link
                 href="/sss"
                 className="inline-block mt-4 text-sm font-medium text-mint hover:text-ink transition-colors"
               >
-                Tüm Sık Sorulan Soruları İnceleyiniz
+                {t("Tüm Sık Sorulan Soruları İnceleyiniz")}
               </Link>
             </FadeIn>
             <FadeIn delay={100}>
-              <TreatmentGuides />
+              <TreatmentGuides guides={guides} />
             </FadeIn>
           </div>
         </section>
@@ -81,13 +90,13 @@ export default function Tedaviler() {
         <section className="bg-ink text-cream">
           <FadeIn className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
             <h2 className="font-serif text-2xl md:text-3xl leading-tight max-w-md">
-              Sağlıklı gülüşler için randevu alınız
+              {t("Sağlıklı gülüşler için randevu alınız")}
             </h2>
             <Link
               href="/iletisim"
               className="rounded-full bg-cream text-ink text-sm font-medium px-7 py-3.5 hover:bg-mint-light transition-colors flex-shrink-0"
             >
-              İletişime Geçiniz
+              {t("İletişime Geçiniz")}
             </Link>
           </FadeIn>
         </section>

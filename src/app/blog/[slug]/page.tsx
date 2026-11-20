@@ -4,15 +4,18 @@ import { notFound } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import FadeIn from '@/components/FadeIn';
-import { blogPosts } from '@/data/blogPosts';
+import { blogPosts as blogPostsTr } from '@/data/blogPosts';
+import { getT, localizeData, formatDate } from '@/i18n/server';
 import { ArrowLeft } from 'lucide-react';
 
 export function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.slug }));
+  return blogPostsTr.map((post) => ({ slug: post.slug }));
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t, locale } = await getT();
+  const blogPosts = await localizeData('data', 'blogPosts', blogPostsTr, locale);
   const post = blogPosts.find((p) => p.slug === slug);
 
   if (!post) {
@@ -31,11 +34,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 href="/blog"
                 className="inline-flex items-center gap-2 text-sm text-cream/60 hover:text-cream transition-colors mb-8"
               >
-                <ArrowLeft className="w-4 h-4" />
-                Blog&apos;a Dönünüz
-              </Link>
+                <ArrowLeft className="w-4 h-4" />{t("Blog'a Dönünüz")}</Link>
               <div className="text-xs text-cream/50 mb-3">
-                <span>{post.date}</span>
+                <span>{formatDate(post.date, locale)}</span>
               </div>
               <h1 className="font-serif font-light text-3xl md:text-4xl leading-tight">
                 {post.title}

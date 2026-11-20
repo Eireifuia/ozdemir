@@ -10,15 +10,20 @@ import TurkeyMapView from '@/components/TurkeyMapView';
 import { education, certificates, languages, experience } from '@/data/cv';
 import { allVisited, worldCountryCount } from '@/data/travel';
 import { provincePlateCodes, visitedProvinceNames } from '@/data/turkeyProvinces';
+import { getT, localizeData } from '@/i18n/server';
 
 const visitedPlateCodes = visitedProvinceNames.map((name) => provincePlateCodes[name]);
 
-export const metadata: Metadata = {
-  title: 'Hakkımda | Çocuk Diş Hekimi Dr. Ömer Özdemir',
-  description:
-    'Dr. Ömer Özdemir: eğitim, pedodonti (çocuk diş hekimliği) alanındaki akademik çalışmalar, uluslararası deneyim ve çalıştığı klinikler.',
-  alternates: { canonical: '/hakkinda' },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+  return {
+    title: t('Hakkımda | Çocuk Diş Hekimi Dr. Ömer Özdemir'),
+    description: t(
+      'Dr. Ömer Özdemir: eğitim, pedodonti (çocuk diş hekimliği) alanındaki akademik çalışmalar, uluslararası deneyim ve çalıştığı klinikler.'
+    ),
+    alternates: { canonical: '/hakkinda' },
+  };
+}
 
 function Eyebrow({ children, tone = 'light' }: { children: React.ReactNode; tone?: 'light' | 'dark' }) {
   return (
@@ -32,7 +37,9 @@ function Eyebrow({ children, tone = 'light' }: { children: React.ReactNode; tone
   );
 }
 
-export default function HakkindaPage() {
+export default async function HakkindaPage() {
+  const { t, locale } = await getT();
+  const cv = await localizeData('data', 'cv', { education, certificates, languages, experience }, locale);
   const percent = Math.round((allVisited.length / worldCountryCount) * 100);
 
   return (
@@ -43,19 +50,12 @@ export default function HakkindaPage() {
         <section className="bg-ink text-cream">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28 grid md:grid-cols-2 gap-16 items-center">
             <FadeIn direction="left">
-              <Eyebrow tone="dark">Özgeçmiş</Eyebrow>
+              <Eyebrow tone="dark">{t("Özgeçmiş")}</Eyebrow>
               <h1 className="font-serif font-light text-4xl md:text-5xl leading-tight mb-4">
                 <RevealText text="Dr. Ömer Özdemir" />
               </h1>
-              <p className="text-cream/70 text-sm uppercase tracking-[0.15em] mb-6">
-                DDS, PhD
-              </p>
-              <p className="text-cream/65 leading-relaxed max-w-md">
-                Çocuk diş hekimi. İstanbul Üniversitesi Diş Hekimliği Fakültesi&apos;nde
-                Pedodonti alanında akademik çalışmalarını yürütmekte ve klinik pratiğini
-                İstanbul&apos;daki iki klinikte sürdürmektedir. Çocukların diş hekimine
-                korkusuz bir deneyimle gelebilmesi çalışmalarının temel amacıdır.
-              </p>
+              <p className="text-cream/70 text-sm uppercase tracking-[0.15em] mb-6">{t("DDS, PhD")}</p>
+              <p className="text-cream/65 leading-relaxed max-w-md">{t("Çocuk diş hekimi. İstanbul Üniversitesi Diş Hekimliği Fakültesi'nde Pedodonti alanında akademik çalışmalarını yürütmekte ve klinik pratiğini İstanbul'daki iki klinikte sürdürmektedir. Çocukların diş hekimine korkusuz bir deneyimle gelebilmesi çalışmalarının temel amacıdır.")}</p>
             </FadeIn>
             <FadeIn direction="right" delay={150} className="relative">
               <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-cream-alt">
@@ -69,36 +69,13 @@ export default function HakkindaPage() {
         <section className="bg-cream">
           <FadeIn className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
             <div className="max-w-3xl">
-              <Eyebrow>Hakkımda</Eyebrow>
-              <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-6">
-                Eğitim ve klinik çalışmalar
-              </h2>
+              <Eyebrow>{t("Hakkımda")}</Eyebrow>
+              <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-6">{t("Eğitim ve klinik çalışmalar")}</h2>
               <div className="space-y-4">
-                <p className="text-ink-soft leading-relaxed">
-                  İstanbul Üniversitesi Diş Hekimliği Fakültesi&apos;ndeki eğitimini 2017-2022
-                  yılları arasında tamamlamıştır. 2020-2022 yılları arasında aynı üniversitenin
-                  Sağlık Kurumları İşletmeciliği bölümünde önlisans eğitimi almıştır. 2023
-                  yılında Pedodonti (Çocuk Diş Hekimliği) Anabilim Dalı&apos;nda başladığı doktora
-                  eğitimine devam etmektedir ve eğitimin 2027 yılında tamamlanması
-                  beklenmektedir.
-                </p>
-                <p className="text-ink-soft leading-relaxed">
-                  Doktora çalışmaları kapsamında Japonya&apos;daki Kyushu University&apos;de bir yıl
-                  boyunca misafir araştırmacı olarak bulunmuştur. Erasmus+ programı kapsamında
-                  Belçika&apos;nın Genk şehrindeki Whitecenter Belgie&apos;de klinik staj
-                  tamamlamıştır.
-                </p>
-                <p className="text-ink-soft leading-relaxed">
-                  Eğitim hayatı boyunca gönüllülük çalışmalarında da yer almıştır. 2018 yılında
-                  Assalam Community Foundation ile Zanzibar&apos;da kadınlara ve çocuklara gönüllü
-                  sağlık hizmeti vermiştir. 2019 yılında Volunteers of Turkish ile Nijer&apos;in
-                  Aguié bölgesinde gönüllü diş hekimliği hizmeti sunmuştur.
-                </p>
-                <p className="text-ink-soft leading-relaxed">
-                  Dr. Ömer Özdemir ileri düzey İngilizce, Japonca (N4) ve Türk İşaret Dili (A2)
-                  bilgisine sahiptir. Avrupa ve Anadolu yakasındaki kliniklerde çocuk hastalara
-                  hizmet vermektedir.
-                </p>
+                <p className="text-ink-soft leading-relaxed">{t("İstanbul Üniversitesi Diş Hekimliği Fakültesi'ndeki eğitimini 2017-2022 yılları arasında tamamlamıştır. 2020-2022 yılları arasında aynı üniversitenin Sağlık Kurumları İşletmeciliği bölümünde önlisans eğitimi almıştır. 2023 yılında Pedodonti (Çocuk Diş Hekimliği) Anabilim Dalı'nda başladığı doktora eğitimine devam etmektedir ve eğitimin 2027 yılında tamamlanması beklenmektedir.")}</p>
+                <p className="text-ink-soft leading-relaxed">{t("Doktora çalışmaları kapsamında Japonya'daki Kyushu University'de bir yıl boyunca misafir araştırmacı olarak bulunmuştur. Erasmus+ programı kapsamında Belçika'nın Genk şehrindeki Whitecenter Belgie'de klinik staj tamamlamıştır.")}</p>
+                <p className="text-ink-soft leading-relaxed">{t("Eğitim hayatı boyunca gönüllülük çalışmalarında da yer almıştır. 2018 yılında Assalam Community Foundation ile Zanzibar'da kadınlara ve çocuklara gönüllü sağlık hizmeti vermiştir. 2019 yılında Volunteers of Turkish ile Nijer'in Aguié bölgesinde gönüllü diş hekimliği hizmeti sunmuştur.")}</p>
+                <p className="text-ink-soft leading-relaxed">{t("Dr. Ömer Özdemir ileri düzey İngilizce, Japonca (N4) ve Türk İşaret Dili (A2) bilgisine sahiptir. Avrupa ve Anadolu yakasındaki kliniklerde çocuk hastalara hizmet vermektedir.")}</p>
               </div>
             </div>
           </FadeIn>
@@ -107,12 +84,10 @@ export default function HakkindaPage() {
         {/* Education */}
         <section className="bg-white">
           <FadeIn className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
-            <Eyebrow>Eğitim</Eyebrow>
-            <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-10">
-              Akademik geçmiş
-            </h2>
+            <Eyebrow>{t("Eğitim")}</Eyebrow>
+            <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-10">{t("Akademik geçmiş")}</h2>
             <div className="divide-y divide-ink/10 border-t border-ink/10">
-              {education.map((item) => (
+              {cv.education.map((item) => (
                 <div key={item.degree} className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 py-5">
                   <div>
                     <span className="text-ink font-medium block">{item.degree}</span>
@@ -132,12 +107,10 @@ export default function HakkindaPage() {
         <section className="bg-cream-alt">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24 grid md:grid-cols-2 gap-16">
             <FadeIn direction="left">
-              <Eyebrow>Sertifikalar</Eyebrow>
-              <h2 className="font-serif text-xl md:text-2xl text-ink leading-tight mb-4">
-                Sertifikalar
-              </h2>
+              <Eyebrow>{t("Sertifikalar")}</Eyebrow>
+              <h2 className="font-serif text-xl md:text-2xl text-ink leading-tight mb-4">{t("Sertifikalar")}</h2>
               <div className="divide-y divide-ink/10 border-t border-ink/10">
-                {certificates.map((cert) => (
+                {cv.certificates.map((cert) => (
                   <div key={cert.title} className="py-3">
                     <span className="text-sm text-ink font-medium block">{cert.title}</span>
                     <span className="text-xs text-ink-soft">{cert.issuer}</span>
@@ -146,12 +119,10 @@ export default function HakkindaPage() {
               </div>
             </FadeIn>
             <FadeIn direction="right" delay={150}>
-              <Eyebrow>Diller</Eyebrow>
-              <h2 className="font-serif text-xl md:text-2xl text-ink leading-tight mb-4">
-                Yabancı diller
-              </h2>
+              <Eyebrow>{t("Diller")}</Eyebrow>
+              <h2 className="font-serif text-xl md:text-2xl text-ink leading-tight mb-4">{t("Yabancı diller")}</h2>
               <div className="divide-y divide-ink/10 border-t border-ink/10">
-                {languages.map((lang) => (
+                {cv.languages.map((lang) => (
                   <div key={lang.name} className="py-3 flex items-center justify-between">
                     <span className="text-sm text-ink font-medium">{lang.name}</span>
                     <span className="text-xs text-ink-soft">{lang.level}</span>
@@ -166,13 +137,11 @@ export default function HakkindaPage() {
         <section className="bg-white">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
             <FadeIn>
-              <Eyebrow>Uluslararası Deneyim</Eyebrow>
-              <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-10">
-                Yurt dışı deneyimler ve stajlar
-              </h2>
+              <Eyebrow>{t("Uluslararası Deneyim")}</Eyebrow>
+              <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-10">{t("Yurt dışı deneyimler ve stajlar")}</h2>
             </FadeIn>
             <div className="grid sm:grid-cols-2 gap-x-10 gap-y-10">
-              {experience.map((exp, i) => (
+              {cv.experience.map((exp, i) => (
                 <FadeIn key={exp.org} delay={i * 80} className="border-t border-ink/10 pt-5">
                   <span className="text-ink font-medium block">{exp.org}</span>
                   <span className="text-sm text-mint block mb-2">{exp.role}</span>
@@ -189,10 +158,8 @@ export default function HakkindaPage() {
         <section className="bg-cream-alt">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
             <FadeIn>
-              <Eyebrow>Gezdiği Yerler</Eyebrow>
-              <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-10">
-                Dünya haritası
-              </h2>
+              <Eyebrow>{t("Gezdiği Yerler")}</Eyebrow>
+              <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-10">{t("Dünya haritası")}</h2>
             </FadeIn>
 
             <FadeIn className="relative max-w-3xl mx-auto">
@@ -202,7 +169,7 @@ export default function HakkindaPage() {
                   {allVisited.length}
                 </span>
                 <span className="text-[10px] text-ink-soft uppercase tracking-[0.1em]">
-                  yer · ~%{percent}
+                  {locale === 'tr' ? `yer · ~%${percent}` : `${t('yer')} · ~${percent}%`}
                 </span>
               </div>
             </FadeIn>
@@ -213,10 +180,8 @@ export default function HakkindaPage() {
         <section className="bg-white">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
             <FadeIn>
-              <Eyebrow>Gezdiği Şehirler</Eyebrow>
-              <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-10">
-                Türkiye Haritası
-              </h2>
+              <Eyebrow>{t("Gezdiği Şehirler")}</Eyebrow>
+              <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-10">{t("Türkiye Haritası")}</h2>
             </FadeIn>
             <FadeIn className="relative max-w-2xl mx-auto">
               <TurkeyMapView visitedPlateCodes={visitedPlateCodes} />
@@ -224,7 +189,7 @@ export default function HakkindaPage() {
                 <span className="font-serif text-2xl text-ink block leading-none">
                   {visitedProvinceNames.length}
                 </span>
-                <span className="text-[10px] text-ink-soft uppercase tracking-[0.1em]">şehir · 81 il</span>
+                <span className="text-[10px] text-ink-soft uppercase tracking-[0.1em]">{t("şehir · 81 il")}</span>
               </div>
             </FadeIn>
           </div>
@@ -233,15 +198,11 @@ export default function HakkindaPage() {
         {/* Closing CTA */}
         <section className="bg-ink text-cream">
           <FadeIn className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-            <h2 className="font-serif text-2xl md:text-3xl leading-tight max-w-md">
-              İlk randevu için bir mesaj yeterli
-            </h2>
+            <h2 className="font-serif text-2xl md:text-3xl leading-tight max-w-md">{t("İlk randevu için bir mesaj yeterli")}</h2>
             <Link
               href="/iletisim"
               className="rounded-full bg-cream text-ink text-sm font-medium px-7 py-3.5 hover:bg-mint-light transition-colors flex-shrink-0"
-            >
-              İletişime Geçiniz
-            </Link>
+            >{t("İletişime Geçiniz")}</Link>
           </FadeIn>
         </section>
       </main>

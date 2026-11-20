@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { useT } from '@/i18n/client';
 
 export type LightboxImage = {
   src: string;
@@ -20,6 +21,7 @@ type Props = {
 };
 
 export default function LightboxTrigger({ images, index, className, children }: Props) {
+  const t = useT();
   const [current, setCurrent] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -62,7 +64,7 @@ export default function LightboxTrigger({ images, index, className, children }: 
         type="button"
         onClick={() => setCurrent(index)}
         className={`cursor-zoom-in ${className ?? ''}`}
-        aria-label={`Büyütmek için tıklayınız: ${images[index]?.alt ?? ''}`}
+        aria-label={`${t('Büyütmek için tıklayınız')}: ${images[index]?.alt ?? ''}`}
       >
         {children}
       </button>
@@ -95,7 +97,7 @@ export default function LightboxTrigger({ images, index, className, children }: 
                     prev();
                   }}
                   className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-cream/10 text-cream hover:bg-cream/20 flex items-center justify-center transition-colors"
-                  aria-label="Önceki görsel"
+                  aria-label={t("Önceki görsel")}
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
@@ -106,7 +108,7 @@ export default function LightboxTrigger({ images, index, className, children }: 
                     next();
                   }}
                   className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-cream/10 text-cream hover:bg-cream/20 flex items-center justify-center transition-colors"
-                  aria-label="Sonraki görsel"
+                  aria-label={t("Sonraki görsel")}
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>

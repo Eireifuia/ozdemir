@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { treatmentGuides } from '@/data/treatmentGuides';
+import type { Guide } from '@/data/treatmentGuides';
 
-const TreatmentGuides = () => {
+const TreatmentGuides = ({ guides: treatmentGuides }: { guides: Guide[] }) => {
   const [openId, setOpenId] = useState<string | null>(null);
 
   // Detay sayfalarından gelen #guide-id bağlantısı ilgili yazıyı açar

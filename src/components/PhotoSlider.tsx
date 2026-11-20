@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import LoopVideo from '@/components/LoopVideo';
 import type { ClinicPhoto } from '@/data/clinicPhotos';
+import { getT } from '@/i18n/server';
 
 /**
  * Fotoğraf ve kısa videoları yana doğru sürekli kayan bir şerit olarak gösterir.
@@ -8,12 +9,13 @@ import type { ClinicPhoto } from '@/data/clinicPhotos';
  * kayma yoktur, şerit elle kaydırılır ve videolar oynamaz.
  * Tüm kareler aynı yüksekliktedir; videolar (9:16) kırpılmadan, tam sığar.
  */
-export default function PhotoSlider({ photos }: { photos: ClinicPhoto[] }) {
+export default async function PhotoSlider({ photos }: { photos: ClinicPhoto[] }) {
+  const { t } = await getT();
   return (
     <div
       className="overflow-hidden motion-reduce:overflow-x-auto -mx-4 px-4 md:-mx-8 md:px-8"
       role="region"
-      aria-label="Klinik fotoğrafları"
+      aria-label={t("Klinik fotoğrafları")}
       tabIndex={0}
     >
       <div
@@ -38,7 +40,7 @@ export default function PhotoSlider({ photos }: { photos: ClinicPhoto[] }) {
                     src={photo.video}
                     poster={photo.src}
                     rate={photo.rate}
-                    label={copy === 1 ? undefined : photo.caption ?? 'Dentalzone Kids duvar çizimi'}
+                    label={copy === 1 ? undefined : photo.caption ?? t('Dentalzone Kids duvar çizimi')}
                   />
                 ) : (
                   // Yazılar ekranda gösterilmez; ekran okuyucular için alt metin olarak kullanılır

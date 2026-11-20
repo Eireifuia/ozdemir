@@ -10,6 +10,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Geliştirme sırasındaki "N" rozeti sol alttaki dil seçicinin üstüne biniyordu
+  devIndicators: false,
   eslint: {
     // Disable ESLint during build
     ignoreDuringBuilds: true,

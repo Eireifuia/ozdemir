@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import type { KitchenPhoto } from '@/data/kitchenPhotos';
+import { useT } from '@/i18n/client';
 
 const FIRST = 6;
 const STEP = 9;
@@ -12,6 +13,7 @@ const STEP = 9;
  * "Daha fazla göster" ile 9'ar adet eklenir, böylece sayfa kısa ve hafif kalır.
  */
 export default function KitchenGallery({ photos }: { photos: KitchenPhoto[] }) {
+  const t = useT();
   const [visible, setVisible] = useState(FIRST);
   const shown = photos.slice(0, visible);
   const remaining = photos.length - visible;
@@ -47,7 +49,7 @@ export default function KitchenGallery({ photos }: { photos: KitchenPhoto[] }) {
             onClick={() => setVisible((v) => v + STEP)}
             className="rounded-full border border-ink/20 bg-white text-ink text-sm font-medium px-6 py-3 hover:bg-ink hover:text-cream transition-colors"
           >
-            Daha fazla göster ({remaining})
+            {t("Daha fazla göster")} ({remaining})
           </button>
         </div>
       )}

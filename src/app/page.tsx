@@ -10,17 +10,22 @@ import { Star, Check, ArrowRight, MapPin, Phone } from 'lucide-react';
 import TreatmentVisual from '@/components/TreatmentVisual';
 import { getTreatment } from '@/data/treatments';
 import { getGoogleReviews, type GoogleReview } from '@/lib/googleReviews';
-import { blogPosts } from '@/data/blogPosts';
+import { blogPosts as blogPostsTr } from '@/data/blogPosts';
 import { clinicPhotos } from '@/data/clinicPhotos';
 import { clinics } from '@/data/clinics';
 import { siteDescription, siteTitle } from '@/data/site';
 import { siteJsonLd } from '@/lib/jsonLd';
+import { getT, localizeData } from '@/i18n/server';
+import { formatDate } from '@/i18n/server';
 
-export const metadata: Metadata = {
-  title: siteTitle,
-  description: siteDescription,
-  alternates: { canonical: '/' },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+  return {
+    title: t(siteTitle),
+    description: t(siteDescription),
+    alternates: { canonical: '/' },
+  };
+}
 
 const fallbackReviews: GoogleReview[] = [
   {
@@ -125,6 +130,8 @@ function ReviewAvatar({ name }: { name: string }) {
 }
 
 export default async function Home() {
+  const { t, locale } = await getT();
+  const blogPosts = await localizeData('data', 'blogPosts', blogPostsTr, locale);
   const googleData = await getGoogleReviews();
   const reviews = googleData?.reviews ?? fallbackReviews;
   const rating = googleData?.rating ?? 5;
@@ -140,25 +147,25 @@ export default async function Home() {
           <div className="relative mx-auto max-w-[1440px] overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem] bg-ink text-white grid md:grid-cols-[1.05fr_0.95fr] md:min-h-[700px]">
             <div className="relative z-10 flex items-center px-6 md:px-12 lg:px-16 pt-16 pb-10 md:py-20 order-1">
               <FadeIn className="max-w-xl">
-                <Eyebrow tone="dark">Çocuk Diş Hekimi Dr. Ömer Özdemir</Eyebrow>
+                <Eyebrow tone="dark">{t("Çocuk Diş Hekimi Dr. Ömer Özdemir")}</Eyebrow>
                 <h1 className="font-serif font-semibold text-[2.6rem] sm:text-6xl md:text-6xl lg:text-[4.6rem] leading-[1.02] tracking-tight mb-6">
-                  <RevealText text="Çocuklar için korkusuz diş hekimliği" />
+                  <RevealText text={t("Çocuklar için korkusuz diş hekimliği")} />
                 </h1>
                 <p className="text-white/75 text-base md:text-lg leading-relaxed mb-10 max-w-md">
-                  Hayatı sevenler kulübü kurucu üyesi
+                  {t("Hayatı sevenler kulübü kurucu üyesi")}
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Link
                     href="/iletisim"
                     className="rounded-full bg-white text-ink text-sm font-semibold px-7 py-3.5 hover:bg-mint-light transition-colors"
                   >
-                    İletişime Geçiniz
+                    {t("İletişime Geçiniz")}
                   </Link>
                   <Link
                     href="/tedaviler"
                     className="rounded-full border border-white/35 text-white text-sm font-semibold px-7 py-3.5 hover:bg-white/10 transition-colors"
                   >
-                    Tedavileri İnceleyiniz
+                    {t("Tedavileri İnceleyiniz")}
                   </Link>
                 </div>
               </FadeIn>
@@ -196,14 +203,14 @@ export default async function Home() {
               >
                 <h3 className="font-serif text-lg text-ink mb-2 leading-snug flex items-center gap-2">
                   <Check className="w-4 h-4 shrink-0 text-mint" strokeWidth={2.5} />
-                  {item.title}
+                  {t(item.title)}
                 </h3>
-                <p className="text-sm text-ink-soft leading-relaxed mb-3">{item.description}</p>
+                <p className="text-sm text-ink-soft leading-relaxed mb-3">{t(item.description)}</p>
                 <Link
                   href={item.href}
                   className="inline-flex items-center gap-1 text-xs font-medium text-mint hover:text-ink transition-colors"
                 >
-                  Ayrıntıları İnceleyiniz <ArrowRight className="w-3 h-3" />
+                  {t("Ayrıntıları İnceleyiniz")} <ArrowRight className="w-3 h-3" />
                 </Link>
               </FadeIn>
             ))}
@@ -217,29 +224,26 @@ export default async function Home() {
               <Image src="/doctor/dr-pembe-panter-sade.jpg" alt="Dr. Ömer Özdemir, elinde diş modeli olan pembe bir peluş oyuncakla gülümsüyor" fill sizes="(min-width: 768px) 45vw, 100vw" style={{ objectFit: 'cover', objectPosition: 'center 30%' }} />
             </FadeIn>
             <FadeIn direction="right" delay={150}>
-              <Eyebrow>Hakkımda</Eyebrow>
+              <Eyebrow>{t("Hakkımda")}</Eyebrow>
               <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight mb-6">
-                Çocuk diş hekimi Dr. Ömer Özdemir
+                {t("Çocuk diş hekimi Dr. Ömer Özdemir")}
               </h2>
               <div className="space-y-4">
                 <p className="text-ink-soft leading-relaxed">
-                  Dr. Ömer Özdemir çocuk diş hekimidir. Amacı diş hekimine gitmenin
-                  çocuklar için kaygı verici bir deneyim olmaktan çıkmasıdır.
+                  {t("Dr. Ömer Özdemir çocuk diş hekimidir. Amacı diş hekimine gitmenin çocuklar için kaygı verici bir deneyim olmaktan çıkmasıdır.")}
                 </p>
                 <p className="text-ink-soft leading-relaxed">
-                  İstanbul Üniversitesi Diş Hekimliği Fakültesi&apos;nden mezun olmuştur ve
-                  aynı üniversitede Pedodonti (çocuk diş hekimliği) alanında akademik
-                  çalışmalarını yürütmektedir.
+                  {t("İstanbul Üniversitesi Diş Hekimliği Fakültesi'nden mezun olmuştur ve aynı üniversitede Pedodonti (çocuk diş hekimliği) alanında akademik çalışmalarını yürütmektedir.")}
                 </p>
                 <p className="text-ink-soft leading-relaxed">
-                  Mesai dışında seyahat etmekte ve yazmaktadır.
+                  {t("Mesai dışında seyahat etmekte ve yazmaktadır.")}
                 </p>
               </div>
               <Link
                 href="/hakkinda"
                 className="inline-block mt-8 rounded-full bg-ink text-cream text-sm font-medium px-7 py-3.5 hover:bg-mint transition-colors"
               >
-                Özgeçmişi İnceleyiniz
+                {t("Özgeçmişi İnceleyiniz")}
               </Link>
             </FadeIn>
           </div>
@@ -249,27 +253,27 @@ export default async function Home() {
         <section className="bg-cream-alt">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28">
             <FadeIn className="max-w-2xl mb-12">
-              <Eyebrow>Tedaviler</Eyebrow>
+              <Eyebrow>{t("Tedaviler")}</Eyebrow>
               <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
-                Öne çıkan tedaviler
+                {t("Öne çıkan tedaviler")}
               </h2>
             </FadeIn>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredTreatments.map((t, i) => {
-                const treatment = getTreatment(t.slug);
+              {featuredTreatments.map((ft, i) => {
+                const treatment = getTreatment(ft.slug);
                 if (!treatment) return null;
                 return (
-                  <FadeIn key={t.slug} delay={i * 80} className="h-full">
+                  <FadeIn key={ft.slug} delay={i * 80} className="h-full">
                     <Link
-                      href={`/tedaviler/${t.slug}`}
+                      href={`/tedaviler/${ft.slug}`}
                       className="group block h-full bg-white rounded-3xl border border-ink/5 overflow-hidden hover:border-mint/30 hover:shadow-lg transition-all duration-300"
                     >
                       <TreatmentVisual treatment={treatment} variant="card" />
                       <div className="p-6">
-                        <h3 className="font-serif text-lg text-ink mb-2">{t.title}</h3>
-                        <p className="text-sm text-ink-soft leading-relaxed mb-4">{t.description}</p>
+                        <h3 className="font-serif text-lg text-ink mb-2">{t(ft.title)}</h3>
+                        <p className="text-sm text-ink-soft leading-relaxed mb-4">{t(ft.description)}</p>
                         <span className="inline-flex items-center gap-1 text-xs font-medium text-mint group-hover:text-ink transition-colors">
-                          Ayrıntıları İnceleyiniz <ArrowRight className="w-3 h-3" />
+                          {t("Ayrıntıları İnceleyiniz")} <ArrowRight className="w-3 h-3" />
                         </span>
                       </div>
                     </Link>
@@ -282,7 +286,7 @@ export default async function Home() {
                 href="/tedaviler"
                 className="inline-block rounded-full bg-ink text-cream text-sm font-medium px-7 py-3.5 hover:bg-mint transition-colors"
               >
-                Tüm Tedavileri İnceleyiniz
+                {t("Tüm Tedavileri İnceleyiniz")}
               </Link>
             </FadeIn>
           </div>
@@ -292,9 +296,9 @@ export default async function Home() {
         <section className="bg-white">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28">
             <FadeIn className="max-w-2xl mb-12">
-              <Eyebrow>Klinikler</Eyebrow>
+              <Eyebrow>{t("Klinikler")}</Eyebrow>
               <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
-                İki yakada iki klinik
+                {t("İki yakada iki klinik")}
               </h2>
             </FadeIn>
             <div className="grid md:grid-cols-2 gap-6">
@@ -305,7 +309,7 @@ export default async function Home() {
                   className="bg-cream-alt rounded-3xl border border-ink/5 p-6 md:p-8"
                 >
                   <span className="block text-xs font-medium uppercase tracking-[0.2em] text-mint mb-3">
-                    {clinic.side}
+                    {t(clinic.side)}
                   </span>
                   <h3 className="font-serif text-xl text-ink mb-3">{clinic.name}</h3>
                   <p className="flex items-start gap-2 text-sm text-ink-soft leading-relaxed mb-6">
@@ -334,7 +338,7 @@ export default async function Home() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center rounded-full border border-ink/20 text-ink text-sm font-medium px-6 py-3 min-h-11 hover:border-mint hover:text-mint transition-colors"
                     >
-                      Haritada Görüntüleyiniz
+                      {t("Haritada Görüntüleyiniz")}
                     </a>
                   </div>
                 </FadeIn>
@@ -348,12 +352,12 @@ export default async function Home() {
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28">
             <FadeIn className="flex flex-wrap items-end justify-between gap-6 mb-14">
               <div>
-                <Eyebrow>Hasta Yorumları</Eyebrow>
+                <Eyebrow>{t("Hasta Yorumları")}</Eyebrow>
                 <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
-                  Ailelerin görüşleri
+                  {t("Ailelerin görüşleri")}
                 </h2>
                 <p className="text-xs text-ink-soft mt-2">
-                  Yorumlar Google&apos;dan anlık olarak alınmaktadır.
+                  {t("Yorumlar Google'dan anlık olarak alınmaktadır.")}
                 </p>
               </div>
               <a
@@ -405,7 +409,7 @@ export default async function Home() {
                         rel="noopener noreferrer"
                         className="inline-block mt-4 text-xs font-medium text-mint hover:text-ink transition-colors"
                       >
-                        Google&apos;da görüntüleyiniz
+                        {t("Google'da görüntüleyiniz")}
                       </a>
                     )}
                   </FadeIn>
@@ -420,11 +424,11 @@ export default async function Home() {
                   className="absolute top-4 left-4 z-10 inline-flex items-center gap-1.5 bg-white text-ink text-xs font-medium px-3.5 py-2 rounded-full shadow-md hover:bg-mint-light transition-colors"
                 >
                   <GoogleLogo className="w-3.5 h-3.5" />
-                  Google&apos;da Görüntüleyiniz
+                  {t("Google'da Görüntüleyiniz")}
                 </a>
                 <iframe
                   src={clinics[0].mapEmbedSrc}
-                  title={`${clinics[0].name} konumu`}
+                  title={`${clinics[0].name} ${t("konumu")}`}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   allowFullScreen
@@ -439,15 +443,15 @@ export default async function Home() {
         <section className="bg-cream-alt">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-24">
             <FadeIn>
-              <Eyebrow>Klinik</Eyebrow>
+              <Eyebrow>{t("Klinik")}</Eyebrow>
               <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight mb-12">
-                Klinik galerisi
+                {t("Klinik galerisi")}
               </h2>
             </FadeIn>
             {clinicPhotos.length === 0 ? (
               <FadeIn delay={100} className="bg-white rounded-3xl border border-ink/5 p-10 text-center max-w-xl">
                 <p className="text-ink-soft leading-relaxed">
-                  Fotoğraflar yakında eklenecektir.
+                  {t("Fotoğraflar yakında eklenecektir.")}
                 </p>
               </FadeIn>
             ) : (
@@ -460,13 +464,13 @@ export default async function Home() {
         <section className="bg-ink text-cream">
           <FadeIn className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
             <h2 className="font-serif text-2xl md:text-3xl leading-tight max-w-md">
-              İlk randevu için bir mesaj göndermeniz yeterlidir
+              {t("İlk randevu için bir mesaj göndermeniz yeterlidir")}
             </h2>
             <Link
               href="/iletisim"
               className="rounded-full bg-cream text-ink text-sm font-medium px-7 py-3.5 hover:bg-mint-light transition-colors flex-shrink-0"
             >
-              Randevu Alınız
+              {t("Randevu Alınız")}
             </Link>
           </FadeIn>
         </section>
@@ -476,22 +480,22 @@ export default async function Home() {
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20">
             <FadeIn className="flex flex-wrap items-end justify-between gap-6 mb-8">
               <div>
-                <Eyebrow>Günlük</Eyebrow>
+                <Eyebrow>{t("Günlük")}</Eyebrow>
                 <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight">
-                  Notlardan
+                  {t("Notlardan")}
                 </h2>
               </div>
               <Link
                 href="/blog"
                 className="text-sm font-medium text-mint hover:text-ink transition-colors flex-shrink-0"
               >
-                Tüm Yazıları İnceleyiniz
+                {t("Tüm Yazıları İnceleyiniz")}
               </Link>
             </FadeIn>
             {blogPosts.length === 0 ? (
               <FadeIn delay={100} className="bg-cream-alt rounded-3xl border border-ink/5 p-10 text-center">
                 <p className="text-ink-soft leading-relaxed">
-                  Henüz yazı bulunmamaktadır. Yazılar yakında eklenecektir.
+                  {t("Henüz yazı bulunmamaktadır. Yazılar yakında eklenecektir.")}
                 </p>
               </FadeIn>
             ) : (
@@ -510,7 +514,7 @@ export default async function Home() {
                     />
                   </div>
                   <div className="p-8 flex flex-col justify-center">
-                    <span className="text-xs text-ink-soft mb-2">{blogPosts[0].date}</span>
+                    <span className="text-xs text-ink-soft mb-2">{formatDate(blogPosts[0].date, locale)}</span>
                     <h3 className="font-serif text-xl text-ink mb-2 leading-snug">
                       {blogPosts[0].title}
                     </h3>

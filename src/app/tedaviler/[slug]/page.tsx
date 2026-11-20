@@ -10,10 +10,13 @@ import RevealText from '@/components/RevealText';
 import TreatmentVisual from '@/components/TreatmentVisual';
 import LightboxTrigger from '@/components/LightboxTrigger';
 import { clinics } from '@/data/clinics';
-import { getTreatment, treatmentCategories, treatments } from '@/data/treatments';
+import { treatments } from '@/data/treatments';
 import { treatmentGuides } from '@/data/treatmentGuides';
 import { contentUpdatedLabel } from '@/data/site';
 import { breadcrumbJsonLd } from '@/lib/jsonLd';
+import { getT, localizeData } from '@/i18n/server';
+import { localizedTreatment, localizedTreatments, localizedCategories } from '@/i18n/content';
+import { localeMeta } from '@/i18n/config';
 
 export function generateStaticParams() {
   return treatments.map((t) => ({ slug: t.slug }));
@@ -25,7 +28,8 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const treatment = getTreatment(slug);
+  const { locale } = await getT();
+  const treatment = await localizedTreatment(slug, locale);
   if (!treatment) return {};
   return {
     title: treatment.seoTitle,
@@ -36,7 +40,7 @@ export async function generateMetadata({
       title: treatment.seoTitle,
       description: treatment.metaDescription,
       ...(treatment.image ? { images: [treatment.image] } : {}),
-      locale: 'tr_TR',
+      locale: localeMeta[locale].ogLocale,
       type: 'article',
     },
   };
@@ -56,8 +60,11 @@ function Eyebrow({ children, tone = 'light' }: { children: React.ReactNode; tone
 
 export default async function TreatmentPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const treatment = getTreatment(slug);
+  const { t, locale } = await getT();
+  const treatment = await localizedTreatment(slug, locale);
   if (!treatment) notFound();
+  const allTreatments = await localizedTreatments(locale);
+  const guides = await localizeData('data', 'treatmentGuides', treatmentGuides, locale);
 
   const hasStepImages = treatment.steps.some((s) => s.image);
   const stepLightbox = treatment.steps.flatMap((s) => {
@@ -72,13 +79,13 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
     }
     return list;
   });
-  const categoryLabel = treatmentCategories.find((c) => c.id === treatment.category)?.label;
+  const categoryLabel = localizedCategories(locale).find((c) => c.id === treatment.category)?.label;
   // Önce aynı kategoriden, sonra diğerlerinden 3 öneri
   const others = [
-    ...treatments.filter((t) => t.slug !== treatment.slug && t.category === treatment.category),
-    ...treatments.filter((t) => t.slug !== treatment.slug && t.category !== treatment.category),
+    ...allTreatments.filter((o) => o.slug !== treatment.slug && o.category === treatment.category),
+    ...allTreatments.filter((o) => o.slug !== treatment.slug && o.category !== treatment.category),
   ].slice(0, 3);
-  const relatedGuides = treatmentGuides.filter((g) => treatment.relatedGuideIds.includes(g.id));
+  const relatedGuides = guides.filter((g) => treatment.relatedGuideIds.includes(g.id));
 
   const faqJsonLd = {
     '@context': 'https://schema.org',
@@ -102,8 +109,8 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             breadcrumbJsonLd([
-              { name: 'Ana Sayfa', path: '/' },
-              { name: 'Tedaviler', path: '/tedaviler' },
+              { name: t('Ana Sayfa'), path: '/' },
+              { name: t('Tedaviler'), path: '/tedaviler' },
               { name: treatment.title, path: `/tedaviler/${treatment.slug}` },
             ])
           ),
@@ -114,9 +121,9 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
         <section className="bg-ink text-cream">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-14 md:py-20 grid md:grid-cols-[1.2fr_1fr] gap-10 md:gap-16 items-center">
             <FadeIn direction="left">
-              <nav aria-label="Konum" className="text-xs text-cream/55 mb-6 flex flex-wrap gap-2">
+              <nav aria-label={t("Konum")} className="text-xs text-cream/55 mb-6 flex flex-wrap gap-2">
                 <Link href="/tedaviler" className="hover:text-cream transition-colors">
-                  Tedaviler
+                  {t("Tedaviler")}
                 </Link>
                 <span aria-hidden>/</span>
                 <span className="text-cream/80">{treatment.title}</span>
@@ -131,13 +138,13 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
                   href="/iletisim"
                   className="rounded-full bg-cream text-ink text-sm font-medium px-7 py-3.5 hover:bg-mint-light transition-colors"
                 >
-                  Randevu Alınız
+                  {t("Randevu Alınız")}
                 </Link>
                 <Link
                   href="/tedaviler"
                   className="rounded-full border border-cream/25 text-cream text-sm font-medium px-7 py-3.5 hover:bg-cream/10 transition-colors"
                 >
-                  Tüm Tedavileri İnceleyiniz
+                  {t("Tüm Tedavileri İnceleyiniz")}
                 </Link>
               </div>
             </FadeIn>
@@ -229,9 +236,9 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
         <section className="bg-cream-alt">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
             <FadeIn className="max-w-2xl mb-12">
-              <Eyebrow>{treatment.stepsEyebrow ?? 'Süreç'}</Eyebrow>
+              <Eyebrow>{treatment.stepsEyebrow ?? t('Süreç')}</Eyebrow>
               <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
-                {treatment.stepsHeading ?? 'Randevuda neler olmaktadır?'}
+                {treatment.stepsHeading ?? t('Randevuda neler olmaktadır?')}
               </h2>
             </FadeIn>
             {hasStepImages ? (
@@ -334,7 +341,7 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
               <FadeIn className="mt-16 md:mt-24">
                 <div className="max-w-2xl mb-8">
                   <h3 className="font-serif text-2xl md:text-3xl text-ink leading-tight mb-3">
-                    {treatment.compare.heading ?? 'Önce ve sonra'}
+                    {treatment.compare.heading ?? t('Önce ve sonra')}
                   </h3>
                   {treatment.compare.text && (
                     <p className="text-ink-soft leading-relaxed">{treatment.compare.text}</p>
@@ -342,8 +349,8 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
                   {[
-                    { label: 'Önce', ...treatment.compare.before },
-                    { label: 'Sonra', ...treatment.compare.after },
+                    { label: t('Önce'), ...treatment.compare.before },
+                    { label: t('Sonra'), ...treatment.compare.after },
                   ].map((item) => (
                     <figure
                       key={item.label}
@@ -372,9 +379,9 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
         <section className="bg-white">
           <div className="max-w-3xl mx-auto px-4 md:px-8 py-16 md:py-24">
             <FadeIn className="mb-10">
-              <Eyebrow>Sık Sorulan Sorular</Eyebrow>
+              <Eyebrow>{t("Sık Sorulan Sorular")}</Eyebrow>
               <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
-                Merak edilenler
+                {t("Merak edilenler")}
               </h2>
             </FadeIn>
             <FadeIn delay={100} className="divide-y divide-ink/10 border-t border-ink/10">
@@ -392,13 +399,13 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
               href="/sss"
               className="inline-block mt-6 text-sm font-medium text-mint hover:text-ink transition-colors"
             >
-              Tüm Sık Sorulan Soruları İnceleyiniz
+              {t("Tüm Sık Sorulan Soruları İnceleyiniz")}
             </Link>
 
             {relatedGuides.length > 0 && (
               <FadeIn className="mt-14">
                 <h3 className="text-xs font-medium uppercase tracking-[0.2em] text-mint mb-4">
-                  İlgili Yazılar
+                  {t("İlgili Yazılar")}
                 </h3>
                 <ul className="space-y-3">
                   {relatedGuides.map((g) => (
@@ -423,10 +430,10 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20">
             <FadeIn className="max-w-2xl mb-10">
               <h2 className="font-serif text-2xl md:text-3xl leading-tight mb-3">
-                İlk randevu için bir mesaj göndermeniz yeterlidir
+                {t("İlk randevu için bir mesaj göndermeniz yeterlidir")}
               </h2>
               <p className="text-cream/65 leading-relaxed">
-                Size yakın kliniği arayabilir ya da WhatsApp&apos;tan yazabilirsiniz.
+                {t("Size yakın kliniği arayabilir ya da WhatsApp'tan yazabilirsiniz.")}
               </p>
             </FadeIn>
             <div className="grid md:grid-cols-2 gap-5">
@@ -437,7 +444,7 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
                   className="rounded-3xl border border-cream/15 p-6"
                 >
                   <span className="text-xs font-medium uppercase tracking-[0.2em] text-mint-light block mb-2">
-                    {clinic.side}
+                    {t(clinic.side)}
                   </span>
                   <h3 className="font-serif text-xl mb-2">{clinic.name}</h3>
                   <p className="flex items-start gap-2 text-sm text-cream/65 leading-relaxed mb-5">
@@ -472,29 +479,29 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24">
             <FadeIn className="flex flex-wrap items-end justify-between gap-6 mb-10">
               <div>
-                <Eyebrow>Diğer Tedaviler</Eyebrow>
+                <Eyebrow>{t("Diğer Tedaviler")}</Eyebrow>
                 <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight">
-                  Bunlara da göz atınız
+                  {t("Bunlara da göz atınız")}
                 </h2>
               </div>
               <Link
                 href="/tedaviler"
                 className="text-sm font-medium text-mint hover:text-ink transition-colors"
               >
-                Tüm Tedavileri İnceleyiniz
+                {t("Tüm Tedavileri İnceleyiniz")}
               </Link>
             </FadeIn>
             <div className="grid sm:grid-cols-3 gap-5">
-              {others.map((t, i) => (
-                <FadeIn key={t.slug} delay={i * 80}>
+              {others.map((o, i) => (
+                <FadeIn key={o.slug} delay={i * 80}>
                   <Link
-                    href={`/tedaviler/${t.slug}`}
+                    href={`/tedaviler/${o.slug}`}
                     className="block h-full bg-white rounded-3xl border border-ink/5 p-6 hover:border-mint/30 hover:shadow-md transition-all duration-300"
                   >
-                    <h3 className="font-serif text-lg text-ink mb-2 leading-snug">{t.title}</h3>
-                    <p className="text-sm text-ink-soft leading-relaxed mb-4">{t.summary}</p>
+                    <h3 className="font-serif text-lg text-ink mb-2 leading-snug">{o.title}</h3>
+                    <p className="text-sm text-ink-soft leading-relaxed mb-4">{o.summary}</p>
                     <span className="inline-flex items-center gap-1 text-xs font-medium text-mint">
-                      Ayrıntıları İnceleyiniz <ArrowRight className="w-3 h-3" />
+                      {t("Ayrıntıları İnceleyiniz")} <ArrowRight className="w-3 h-3" />
                     </span>
                   </Link>
                 </FadeIn>
@@ -506,9 +513,8 @@ export default async function TreatmentPage({ params }: { params: Promise<{ slug
         {/* Bilgilendirme notu */}
         <div className="bg-cream">
           <p className="max-w-3xl mx-auto px-4 md:px-8 pb-10 text-xs text-ink-soft/80 leading-relaxed text-center">
-            Bu sayfa genel bilgilendirme amaçlıdır ve kişiye özel tanı veya tedavi önerisi yerine geçmez. Çocuğunuzun durumu için
-            muayene gerekmektedir. Sayfanın yazarı çocuk diş hekimi Dr. Ömer Özdemir&apos;dir. İçerik en son {contentUpdatedLabel}{" "}
-            tarihinde gözden geçirilmiştir.
+            {t("Bu sayfa genel bilgilendirme amaçlıdır ve kişiye özel tanı veya tedavi önerisi yerine geçmez. Çocuğunuzun durumu için muayene gerekmektedir. Sayfanın yazarı çocuk diş hekimi Dr. Ömer Özdemir'dir.")}{" "}
+            {t("İçerik en son {date} tarihinde gözden geçirilmiştir.").replace("{date}", t(contentUpdatedLabel))}
           </p>
         </div>
       </main>

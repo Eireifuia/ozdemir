@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, ChevronDown, Search } from 'lucide-react';
+import { useT } from '@/i18n/client';
 
 export type FaqGroup = {
   id: string;
@@ -23,6 +24,7 @@ const normalize = (s: string) =>
     .replace(/ı/g, 'i');
 
 export default function FaqBrowser({ groups }: { groups: FaqGroup[] }) {
+  const t = useT();
   const [active, setActive] = useState<string>('hepsi');
   const [query, setQuery] = useState('');
 
@@ -49,7 +51,7 @@ export default function FaqBrowser({ groups }: { groups: FaqGroup[] }) {
         items: terms.length
           ? g.items.filter((item) => {
               const text = normalize(`${g.title} ${item.q} ${item.a}`);
-              return terms.every((t) => text.includes(t));
+              return terms.every((term) => text.includes(term));
             })
           : g.items,
       }))
@@ -77,20 +79,20 @@ export default function FaqBrowser({ groups }: { groups: FaqGroup[] }) {
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Konu yazınız. Örneğin flor, kanal ya da dil bağı"
-          aria-label="Sorularda ara"
+          placeholder={t("Konu yazınız. Örneğin flor, kanal ya da dil bağı")}
+          aria-label={t("Sorularda ara")}
           className="w-full rounded-full bg-white border border-ink/10 text-ink placeholder:text-ink-soft/70 pl-12 pr-5 py-3.5 focus:outline-none focus:border-mint/60 transition-colors"
         />
       </div>
 
-      <div className="flex flex-wrap gap-2.5 mb-10" role="tablist" aria-label="Soru kategorileri">
+      <div className="flex flex-wrap gap-2.5 mb-10" role="tablist" aria-label={t("Soru kategorileri")}>
         <button
           role="tab"
           aria-selected={active === 'hepsi'}
           onClick={() => setActive('hepsi')}
           className={tabClass(active === 'hepsi')}
         >
-          Tümü ({total})
+          {t("Tümü")} ({total})
         </button>
         {categories.map((c) => (
           <button
@@ -106,20 +108,20 @@ export default function FaqBrowser({ groups }: { groups: FaqGroup[] }) {
       </div>
 
       <p className="text-sm text-ink-soft mb-8" aria-live="polite">
-        {visibleCount} soru gösteriliyor
+        {visibleCount} {t("soru gösteriliyor")}
       </p>
 
       {visible.length === 0 ? (
         <div className="rounded-3xl bg-cream-alt border border-ink/5 p-8 text-center">
-          <p className="font-serif text-xl text-ink mb-2">Aradığınız soru bulunamadı</p>
+          <p className="font-serif text-xl text-ink mb-2">{t("Aradığınız soru bulunamadı")}</p>
           <p className="text-ink-soft leading-relaxed mb-5">
-            Farklı bir kelime deneyebilir ya da sorunuzu doğrudan iletebilirsiniz.
+            {t("Farklı bir kelime deneyebilir ya da sorunuzu doğrudan iletebilirsiniz.")}
           </p>
           <Link
             href="/iletisim"
             className="inline-flex items-center rounded-full bg-ink text-cream text-sm font-medium px-6 py-3 hover:bg-mint transition-colors"
           >
-            İletişime Geçiniz
+            {t("İletişime Geçiniz")}
           </Link>
         </div>
       ) : (
@@ -140,7 +142,7 @@ export default function FaqBrowser({ groups }: { groups: FaqGroup[] }) {
                     href={group.href}
                     className="inline-flex items-center gap-1 text-sm font-medium text-mint hover:text-ink transition-colors"
                   >
-                    Tedavi sayfası <ArrowRight className="w-3.5 h-3.5" />
+                    {t("Tedavi sayfası")} <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 )}
               </div>

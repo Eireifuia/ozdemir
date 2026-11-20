@@ -5,12 +5,20 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import FadeIn from '@/components/FadeIn';
 import TreatmentVisual from '@/components/TreatmentVisual';
-import { treatmentCategories, treatments, type TreatmentCategory } from '@/data/treatments';
+import type { TreatmentCategory, Treatment } from '@/data/treatment-pages/types';
+import { useT } from '@/i18n/client';
 
-export default function TreatmentsBrowser() {
+export default function TreatmentsBrowser({
+  treatments,
+  categories: treatmentCategories,
+}: {
+  treatments: Treatment[];
+  categories: { id: TreatmentCategory; label: string }[];
+}) {
+  const t = useT();
   const [active, setActive] = useState<TreatmentCategory | 'hepsi'>('hepsi');
 
-  const visible = active === 'hepsi' ? treatments : treatments.filter((t) => t.category === active);
+  const visible = active === 'hepsi' ? treatments : treatments.filter((tr) => tr.category === active);
   const labelOf = (id: TreatmentCategory) => treatmentCategories.find((c) => c.id === id)?.label;
 
   const tabClass = (isActive: boolean) =>
@@ -22,14 +30,14 @@ export default function TreatmentsBrowser() {
 
   return (
     <div>
-      <div className="flex flex-wrap gap-2.5 mb-10" role="tablist" aria-label="Tedavi kategorileri">
+      <div className="flex flex-wrap gap-2.5 mb-10" role="tablist" aria-label={t("Tedavi kategorileri")}>
         <button
           role="tab"
           aria-selected={active === 'hepsi'}
           onClick={() => setActive('hepsi')}
           className={tabClass(active === 'hepsi')}
         >
-          Tümü ({treatments.length})
+          {t("Tümü")} ({treatments.length})
         </button>
         {treatmentCategories.map((c) => (
           <button
@@ -39,27 +47,27 @@ export default function TreatmentsBrowser() {
             onClick={() => setActive(c.id)}
             className={tabClass(active === c.id)}
           >
-            {c.label} ({treatments.filter((t) => t.category === c.id).length})
+            {c.label} ({treatments.filter((tr) => tr.category === c.id).length})
           </button>
         ))}
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {visible.map((t, i) => (
-          <FadeIn key={t.slug} delay={(i % 3) * 80}>
+        {visible.map((tr, i) => (
+          <FadeIn key={tr.slug} delay={(i % 3) * 80}>
             <Link
-              href={`/tedaviler/${t.slug}`}
+              href={`/tedaviler/${tr.slug}`}
               className="group block h-full bg-white rounded-3xl border border-ink/5 overflow-hidden hover:border-mint/30 hover:shadow-lg transition-all duration-300"
             >
-              <TreatmentVisual treatment={t} variant="card" />
+              <TreatmentVisual treatment={tr} variant="card" />
               <div className="p-6">
                 <span className="block text-[11px] font-medium uppercase tracking-[0.18em] text-mint mb-2">
-                  {labelOf(t.category)}
+                  {labelOf(tr.category)}
                 </span>
-                <h3 className="font-serif text-lg text-ink leading-snug mb-2">{t.title}</h3>
-                <p className="text-sm text-ink-soft leading-relaxed mb-4">{t.summary}</p>
+                <h3 className="font-serif text-lg text-ink leading-snug mb-2">{tr.title}</h3>
+                <p className="text-sm text-ink-soft leading-relaxed mb-4">{tr.summary}</p>
                 <span className="inline-flex items-center gap-1 text-xs font-medium text-mint group-hover:text-ink transition-colors">
-                  Ayrıntıları İnceleyiniz <ArrowRight className="w-3 h-3" />
+                  {t("Ayrıntıları İnceleyiniz")} <ArrowRight className="w-3 h-3" />
                 </span>
               </div>
             </Link>

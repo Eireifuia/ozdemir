@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { MessageCircle, Phone, X } from 'lucide-react';
 import { clinics } from '@/data/clinics';
+import { useT } from '@/i18n/client';
 
 type Panel = 'ara' | 'whatsapp' | null;
 
@@ -13,6 +14,7 @@ type Panel = 'ara' | 'whatsapp' | null;
  */
 export default function MobileActionBar() {
   const pathname = usePathname();
+  const t = useT();
   const [panel, setPanel] = useState<Panel>(null);
   const [hidden, setHidden] = useState(false);
 
@@ -60,18 +62,18 @@ export default function MobileActionBar() {
         hidden && !panel ? 'translate-y-full' : 'translate-y-0'
       }`}
       role="region"
-      aria-label="Hızlı iletişim"
+      aria-label={t("Hızlı iletişim")}
     >
       {panel && (
         <div className="mx-3 mb-2 rounded-3xl bg-white border border-ink/10 shadow-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-medium uppercase tracking-[0.18em] text-mint">
-              {panel === 'ara' ? 'Aramak istediğiniz kliniği seçiniz' : 'Yazmak istediğiniz kliniği seçiniz'}
+              {panel === 'ara' ? t('Aramak istediğiniz kliniği seçiniz') : t('Yazmak istediğiniz kliniği seçiniz')}
             </span>
             <button
               type="button"
               onClick={() => setPanel(null)}
-              aria-label="Kapat"
+              aria-label={t("Kapat")}
               className="w-8 h-8 inline-flex items-center justify-center rounded-full text-ink-soft hover:bg-cream-alt"
             >
               <X className="w-4 h-4" />
@@ -87,7 +89,7 @@ export default function MobileActionBar() {
                 >
                   <span className="min-w-0">
                     <span className="block text-[11px] uppercase tracking-[0.15em] text-ink-soft">
-                      {clinic.side}
+                      {t(clinic.side)}
                     </span>
                     <span className="block text-sm font-medium text-ink truncate">{clinic.name}</span>
                   </span>
@@ -106,7 +108,7 @@ export default function MobileActionBar() {
           className={`${buttonBase} bg-ink text-cream hover:bg-mint`}
         >
           <Phone className="w-3.5 h-3.5" aria-hidden />
-          Ara
+          {t("Ara")}
         </button>
         <button
           type="button"

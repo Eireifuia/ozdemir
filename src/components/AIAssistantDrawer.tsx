@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { X, Send, CheckCheck, Trash2 } from 'lucide-react';
+import { useT, useLocale } from '@/i18n/client';
 
 interface Message {
   from: 'user' | 'ai';
@@ -19,13 +20,18 @@ const STORAGE_KEY = 'arise-sohbet-v1';
 const STORAGE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 const MAX_STORED = 40;
 
+const GREETING_TR =
+  'Merhaba, ben Arise. Dr. Ömer Özdemir\'in yapay zeka asistanıyım. Çocuklarda diş sağlığıyla ilgili genel sorularınızı yanıtlayabilirim. Kişisel sağlık bilgilerinizi bu sohbette paylaşmayınız.';
+
 const greeting = (): Message => ({
   from: 'ai',
-  text: 'Merhaba, ben Arise. Dr. Ömer Özdemir\'in yapay zeka asistanıyım. Çocuklarda diş sağlığıyla ilgili genel sorularınızı yanıtlayabilirim. Kişisel sağlık bilgilerinizi bu sohbette paylaşmayınız.',
+  text: GREETING_TR,
   timestamp: new Date(),
 });
 
 const AIAssistantDrawer = ({ isOpen, onClose }: AIAssistantDrawerProps) => {
+  const t = useT();
+  const locale = useLocale();
   const [messages, setMessages] = useState<Message[]>(() => [greeting()]);
   const [restored, setRestored] = useState(false);
   const [inputText, setInputText] = useState('');
@@ -117,19 +123,20 @@ const AIAssistantDrawer = ({ isOpen, onClose }: AIAssistantDrawerProps) => {
             role: m.from === 'user' ? 'user' : 'assistant',
             content: m.text,
           })),
+          locale,
         }),
       });
       const data = await res.json();
       setMessages((prev) => [
         ...prev,
-        { from: 'ai', text: data.reply ?? 'Şu anda yanıt verilememektedir. Lütfen biraz sonra yeniden deneyiniz.', timestamp: new Date() },
+        { from: 'ai', text: data.reply ?? t('Şu anda yanıt verilememektedir. Lütfen biraz sonra yeniden deneyiniz.'), timestamp: new Date() },
       ]);
     } catch {
       setMessages((prev) => [
         ...prev,
         {
           from: 'ai',
-          text: 'Bağlantı kurulamadı. Lütfen 0553 888 54 44 numaralı telefondan kliniğe ulaşınız.',
+          text: t('Bağlantı kurulamadı. Lütfen 0553 888 54 44 numaralı telefondan kliniğe ulaşınız.'),
           timestamp: new Date(),
         },
       ]);
@@ -165,19 +172,19 @@ const AIAssistantDrawer = ({ isOpen, onClose }: AIAssistantDrawerProps) => {
           </span>
           <div>
             <h3 className="text-[15px] font-medium leading-tight">Arise</h3>
-            <p className="text-xs text-white/70">çevrimiçi</p>
+            <p className="text-xs text-white/70">{t("çevrimiçi")}</p>
           </div>
         </div>
         <div className="flex items-center">
           <button
             onClick={clearChat}
             className="p-2 rounded-full hover:bg-white/10 transition-colors"
-            aria-label="Sohbeti temizle"
-            title="Sohbeti temizle"
+            aria-label={t("Sohbeti temizle")}
+            title={t("Sohbeti temizle")}
           >
             <Trash2 className="w-4.5 h-4.5" />
           </button>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-colors" aria-label="Kapat">
+          <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-colors" aria-label={t("Kapat")}>
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -204,7 +211,7 @@ const AIAssistantDrawer = ({ isOpen, onClose }: AIAssistantDrawerProps) => {
                     : 'bg-white text-[#111b21] rounded-tl-none'
                 }`}
               >
-                <p className="text-[13.5px] leading-relaxed whitespace-pre-wrap pr-1">{message.text}</p>
+                <p className="text-[13.5px] leading-relaxed whitespace-pre-wrap pr-1">{message.text === GREETING_TR ? t(GREETING_TR) : message.text}</p>
                 <span className="flex items-center justify-end gap-1 mt-0.5 -mb-0.5">
                   <span className="text-[10.5px] text-[#667781]">{formatTime(message.timestamp)}</span>
                   {message.from === 'user' && <CheckCheck className="w-3.5 h-3.5 text-[#53bdeb]" />}
@@ -234,7 +241,7 @@ const AIAssistantDrawer = ({ isOpen, onClose }: AIAssistantDrawerProps) => {
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           onKeyDown={handleKeyPress}
-          placeholder="Mesajınızı yazınız"
+          placeholder={t("Mesajınızı yazınız")}
           disabled={isLoading}
           className="flex-1 rounded-full bg-white px-4 py-2 text-base md:text-sm text-ink focus:outline-none disabled:opacity-60"
         />
@@ -242,13 +249,13 @@ const AIAssistantDrawer = ({ isOpen, onClose }: AIAssistantDrawerProps) => {
           onClick={handleSendMessage}
           disabled={isLoading || inputText.trim() === ''}
           className="w-9 h-9 flex-shrink-0 rounded-full bg-[#075E54] text-white disabled:opacity-40 hover:bg-[#128C7E] transition-colors flex items-center justify-center"
-          aria-label="Gönder"
+          aria-label={t("Gönder")}
         >
           <Send className="w-4 h-4" />
         </button>
       </div>
       <p className="text-[10px] text-ink-soft text-center bg-[#F0F0F0] pb-[max(0.5rem,env(safe-area-inset-bottom))] -mt-1">
-        Bu bir yapay zeka asistanıdır, kesin teşhis için muayene gereklidir. Sohbet yalnızca bu cihazda saklanır.
+        {t("Bu bir yapay zeka asistanıdır, kesin teşhis için muayene gereklidir. Sohbet yalnızca bu cihazda saklanır.")}
       </p>
     </div>
   );

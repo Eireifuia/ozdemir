@@ -84,6 +84,9 @@ type IncomingMessage = { role: 'user' | 'assistant'; content: string };
 
 function stripDashes(text: string): string {
   return text
+    // Saat ve sayı aralıklarında (10:00 – 19:00) çizgi kısa tire olarak korunur
+    .replace(/(\d)\s*[—–]\s*(\d)/g, '$1-$2')
+    .replace(/\*\*/g, '')
     .replace(/\s*[—–]\s*/g, ', ')
     // Sitede şapkalı harf kullanılmaz
     .replace(/â/g, 'a')
@@ -105,6 +108,8 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const incoming: unknown = body?.messages;
+    const siteLanguage =
+      body?.locale === 'en' ? 'İngilizce (English)' : body?.locale === 'ja' ? 'Japonca (日本語)' : 'Türkçe';
 
     const messages = (Array.isArray(incoming) ? incoming : [])
       .slice(-24)
@@ -125,7 +130,10 @@ export async function POST(req: NextRequest) {
       model: 'claude-haiku-4-5',
       max_tokens: 400,
       system: [
-        { type: 'text', text: `${SYSTEM_PROMPT}\n\n${KNOWLEDGE_RULES}` },
+        {
+          type: 'text',
+          text: `${SYSTEM_PROMPT}\n\n${KNOWLEDGE_RULES}\n\nDİL: Ziyaretçi sitenin dilini ${siteLanguage} olarak seçti. Ziyaretçi başka bir dilde yazmadıkça cevaplarını bu dilde ver. Tedavi adlarını ve site bilgisini bu dile doğal biçimde çevir. Yukarıdaki "siz" hitabı ve yazım kuralları Türkçe içindir, diğer dillerde o dilin nazik ve doğal hitabını kullan.`,
+        },
         { type: 'text', text: `SİTE BİLGİSİ:\n${buildAriseKnowledge()}`, cache_control: { type: 'ephemeral' } },
       ],
       messages,

@@ -6,6 +6,10 @@ import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 import { Menu, X, Phone, ChevronDown, MapPin } from 'lucide-react';
 import AIAssistantDrawer from './AIAssistantDrawer';
+import { useT, useLocale } from '@/i18n/client';
+import { LOCALE_COOKIE, localeMeta, locales } from '@/i18n/config';
+import Flag from './Flags';
+import { useRouter } from 'next/navigation';
 import { clinics } from '@/data/clinics';
 
 const links = [
@@ -18,6 +22,9 @@ const links = [
 
 const Navbar = () => {
   const pathname = usePathname();
+  const t = useT();
+  const locale = useLocale();
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -100,7 +107,7 @@ const Navbar = () => {
               <Link href="/" className="flex items-center gap-3">
                 <Image
                   src="/oo-monogram.svg"
-                  alt="Dr. Ömer Özdemir Logo"
+                  alt={t("Dr. Ömer Özdemir Logo")}
                   width={48}
                   height={44}
                   className="object-contain"
@@ -113,12 +120,12 @@ const Navbar = () => {
                   onClick={() => setClinicsOpen((open) => !open)}
                   aria-expanded={clinicsOpen}
                   aria-haspopup="true"
-                  aria-label="Klinikler ve telefon numaraları"
+                  aria-label={t("Klinikler ve telefon numaraları")}
                   className="flex items-center gap-2 text-xs text-ink-soft hover:text-mint transition-colors whitespace-nowrap"
                 >
                   <Phone className="w-3.5 h-3.5" />
-                  <span className="hidden xl:inline">Klinikler ve telefon</span>
-                  <span className="xl:hidden">Klinikler</span>
+                  <span className="hidden xl:inline">{t("Klinikler ve telefon")}</span>
+                  <span className="xl:hidden">{t("Klinikler")}</span>
                   <ChevronDown
                     className={`w-3.5 h-3.5 transition-transform duration-200 ${
                       clinicsOpen ? 'rotate-180' : ''
@@ -130,7 +137,7 @@ const Navbar = () => {
                     {clinics.map((clinic) => (
                       <div key={clinic.id}>
                         <span className="block text-[11px] font-medium uppercase tracking-[0.18em] text-mint mb-1">
-                          {clinic.side}
+                          {t(clinic.side)}
                         </span>
                         <p className="font-serif text-base text-ink mb-1">{clinic.name}</p>
                         <p className="flex items-start gap-1.5 text-xs text-ink-soft leading-relaxed mb-3">
@@ -159,7 +166,7 @@ const Navbar = () => {
                             rel="noopener noreferrer"
                             className="inline-flex items-center rounded-full border border-ink/15 text-ink text-xs font-medium px-4 py-2 hover:border-mint hover:text-mint transition-colors"
                           >
-                            Harita
+                            {t("Harita")}
                           </a>
                         </div>
                       </div>
@@ -174,7 +181,7 @@ const Navbar = () => {
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="text-ink w-11 h-11 inline-flex items-center justify-center"
-                aria-label="Menüyü aç/kapat"
+                aria-label={t("Menüyü aç/kapat")}
                 aria-expanded={mobileMenuOpen}
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -182,7 +189,7 @@ const Navbar = () => {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-5 xl:gap-8">
+            <div className="hidden md:flex items-center gap-3.5 lg:gap-5 xl:gap-8">
               {links.map((link) => (
                 <Link
                   key={link.href}
@@ -191,7 +198,7 @@ const Navbar = () => {
                     isActivePath(link.href) ? 'text-mint' : 'text-ink-soft hover:text-ink'
                   }`}
                 >
-                  {link.label}
+                  {t(link.label)}
                 </Link>
               ))}
               <button
@@ -201,7 +208,7 @@ const Navbar = () => {
                 <span className="relative w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
                   <Image src="/arise-logo.svg" alt="" fill style={{ objectFit: 'cover' }} />
                 </span>
-                AI Asistan
+                {t("AI Asistan")}
               </button>
             </div>
           </div>
@@ -222,7 +229,7 @@ const Navbar = () => {
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  {link.label}
+                  {t(link.label)}
                 </Link>
               ))}
               <button
@@ -235,13 +242,33 @@ const Navbar = () => {
                 <span className="relative w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
                   <Image src="/arise-logo.svg" alt="" fill style={{ objectFit: 'cover' }} />
                 </span>
-                AI Asistan
+                {t("AI Asistan")}
               </button>
+              <div className="mt-2 flex flex-wrap gap-2 px-3">
+                {locales.map((l) => (
+                  <button
+                    key={l}
+                    type="button"
+                    onClick={() => {
+                      document.cookie = `${LOCALE_COOKIE}=${l}; path=/; max-age=31536000; samesite=lax`;
+                      setMobileMenuOpen(false);
+                      router.refresh();
+                    }}
+                    aria-pressed={l === locale}
+                    className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold ${
+                      l === locale ? 'border-ink bg-ink text-cream' : 'border-ink/15 text-ink'
+                    }`}
+                  >
+                    <Flag locale={l} className="w-5 h-3.5" />
+                    {localeMeta[l].code}
+                  </button>
+                ))}
+              </div>
               <div className="mt-3 border-t border-ink/10 pt-4 space-y-4 px-3">
                 {clinics.map((clinic) => (
                   <div key={clinic.id}>
                     <span className="block text-[11px] font-medium uppercase tracking-[0.18em] text-mint mb-0.5">
-                      {clinic.side}
+                      {t(clinic.side)}
                     </span>
                     <p className="font-serif text-base text-ink">{clinic.name}</p>
                     <p className="text-xs text-ink-soft leading-relaxed mb-2">{clinic.address}</p>
@@ -279,7 +306,7 @@ const Navbar = () => {
           <button
             type="button"
             onClick={dismissAiHint}
-            aria-label="Kapat"
+            aria-label={t("Kapat")}
             className="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-ink text-cream flex items-center justify-center shadow"
           >
             <X className="w-3.5 h-3.5" />
@@ -293,10 +320,10 @@ const Navbar = () => {
             className="text-left"
           >
             <span className="block text-[11px] font-semibold uppercase tracking-[0.15em] text-mint mb-1">
-              Yapay zeka asistanı
+              {t("Yapay zeka asistanı")}
             </span>
             <span className="block text-sm text-ink leading-snug">
-              Merhaba, ben Arise. Çocuğunuzun diş sağlığıyla ilgili sorularınızı yanıtlayabilirim.
+              {t("Merhaba, ben Arise. Çocuğunuzun diş sağlığıyla ilgili sorularınızı yanıtlayabilirim.")}
             </span>
           </button>
         </div>
@@ -308,7 +335,7 @@ const Navbar = () => {
           dismissAiHint();
           setDrawerOpen((prev) => !prev);
         }}
-        aria-label={drawerOpen ? 'AI Asistanı kapat' : 'AI Asistan ile konuş'}
+        aria-label={drawerOpen ? t('AI Asistanı kapat') : t('AI Asistan ile konuş')}
         className={`fixed z-50 bottom-20 right-4 md:bottom-6 md:right-6 ${drawerOpen ? 'max-md:hidden' : ''} w-14 h-14 md:w-16 md:h-16 rounded-full bg-ink shadow-lg hover:bg-mint transition-all duration-200 hover:scale-105 flex items-center justify-center overflow-hidden`}
       >
         {drawerOpen ? (

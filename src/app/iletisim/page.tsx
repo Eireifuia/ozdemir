@@ -8,13 +8,18 @@ import { Phone, Clock, ArrowUpRight } from 'lucide-react';
 import { clinics } from '@/data/clinics';
 import { instagramUrl } from '@/data/site';
 import { siteJsonLd } from '@/lib/jsonLd';
+import { getT } from '@/i18n/server';
 
-export const metadata: Metadata = {
-  title: 'İletişim ve Randevu | Çocuk Diş Hekimi Dr. Ömer Özdemir',
-  description:
-    'Bakırköy (Avrupa Yakası) ve Acıbadem/Üsküdar (Anadolu Yakası) kliniklerinin adres, telefon, WhatsApp ve çalışma saatleri. Çocuk diş hekimi Dr. Ömer Özdemir için randevu bilgileri.',
-  alternates: { canonical: '/iletisim' },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+  return {
+    title: t('İletişim ve Randevu | Çocuk Diş Hekimi Dr. Ömer Özdemir'),
+    description: t(
+      'Bakırköy (Avrupa Yakası) ve Acıbadem/Üsküdar (Anadolu Yakası) kliniklerinin adres, telefon, WhatsApp ve çalışma saatleri. Çocuk diş hekimi Dr. Ömer Özdemir için randevu bilgileri.'
+    ),
+    alternates: { canonical: '/iletisim' },
+  };
+}
 
 const hours = [
   { day: 'Pazartesi – Cuma', value: '10:00 – 19:00' },
@@ -64,7 +69,8 @@ function InfoLabel({ children }: { children: React.ReactNode }) {
   return <span className="block text-xs uppercase tracking-[0.15em] text-ink-soft mb-2">{children}</span>;
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const { t } = await getT();
   return (
     <div className="min-h-screen bg-cream">
       <Navbar />
@@ -73,13 +79,13 @@ export default function ContactPage() {
         <section className="bg-ink text-cream">
           <FadeIn className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20">
             <span className="block text-xs font-medium uppercase tracking-[0.2em] text-mint-light mb-4">
-              İletişim
+              {t("İletişim")}
             </span>
             <h1 className="font-serif font-light text-4xl md:text-5xl leading-tight max-w-xl">
-              <RevealText text="Gülüşe giden ilk adım" />
+              <RevealText text={t("Gülüşe giden ilk adım")} />
             </h1>
             <p className="text-cream/65 leading-relaxed mt-4 max-w-md">
-              Randevu ve sorularınız için iletişime geçiniz.
+              {t("Randevu ve sorularınız için iletişime geçiniz.")}
             </p>
           </FadeIn>
         </section>
@@ -88,10 +94,10 @@ export default function ContactPage() {
         <section className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-20">
           <FadeIn className="mb-10">
             <span className="block text-xs font-medium uppercase tracking-[0.2em] text-mint mb-4">
-              Klinikler
+              {t("Klinikler")}
             </span>
             <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight">
-              İki yakada iki klinik
+              {t("İki yakada iki klinik")}
             </h2>
           </FadeIn>
           <div className="grid md:grid-cols-2 gap-6">
@@ -108,11 +114,11 @@ export default function ContactPage() {
                     rel="noopener noreferrer"
                     className="absolute top-4 left-4 z-10 inline-flex items-center gap-1.5 bg-white text-ink text-xs font-medium px-3.5 py-2 rounded-full shadow-md hover:bg-mint-light transition-colors"
                   >
-                    Haritada Görüntüleyiniz <ArrowUpRight className="w-3.5 h-3.5" />
+                    {t("Haritada Görüntüleyiniz")} <ArrowUpRight className="w-3.5 h-3.5" />
                   </a>
                   <iframe
                     src={clinic.mapEmbedSrc}
-                    title={`${clinic.name} konumu`}
+                    title={`${clinic.name} ${t("konumu")}`}
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                     allowFullScreen
@@ -120,7 +126,7 @@ export default function ContactPage() {
                   ></iframe>
                 </div>
                 <div className="p-6">
-                  <InfoLabel>{clinic.side}</InfoLabel>
+                  <InfoLabel>{t(clinic.side)}</InfoLabel>
                   <h3 className="font-serif text-lg text-ink mb-2">{clinic.name}</h3>
                   <p className="text-sm text-ink-soft leading-relaxed mb-4">{clinic.address}</p>
                   <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
@@ -162,7 +168,7 @@ export default function ContactPage() {
                     <InstagramIcon className="w-5 h-5" />
                   </span>
                   <div>
-                    <span className="text-ink font-medium block">Instagram&apos;da Takip Ediniz</span>
+                    <span className="text-ink font-medium block">{t("Instagram'da Takip Ediniz")}</span>
                     <span className="text-sm text-ink-soft">@omertarikozdemir</span>
                   </div>
                 </div>
@@ -174,13 +180,13 @@ export default function ContactPage() {
                   <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-mint-light text-mint flex-shrink-0">
                     <Clock className="w-4 h-4" />
                   </span>
-                  <InfoLabel>Çalışma saatleri</InfoLabel>
+                  <InfoLabel>{t("Çalışma saatleri")}</InfoLabel>
                 </div>
                 <div className="divide-y divide-ink/10 pl-14 -mt-2">
                   {hours.map((h) => (
                     <div key={h.day} className="flex items-center justify-between py-2.5 text-sm">
-                      <span className="text-ink-soft">{h.day}</span>
-                      <span className="text-ink font-medium">{h.value}</span>
+                      <span className="text-ink-soft">{t(h.day)}</span>
+                      <span className="text-ink font-medium">{t(h.value)}</span>
                     </div>
                   ))}
                 </div>
@@ -190,9 +196,9 @@ export default function ContactPage() {
             {/* Right column: message form */}
             <FadeIn direction="right" delay={150}>
               <div className="bg-white rounded-3xl border border-ink/5 p-6 md:p-8 h-full">
-                <h2 className="font-serif text-xl text-ink mb-1">Mesaj gönderiniz</h2>
+                <h2 className="font-serif text-xl text-ink mb-1">{t("Mesaj gönderiniz")}</h2>
                 <p className="text-sm text-ink-soft mb-6">
-                  Kliniği seçip kısa mesajınızı yazdığınızda WhatsApp sohbeti hazır metinle açılmaktadır.
+                  {t("Kliniği seçip kısa mesajınızı yazdığınızda WhatsApp sohbeti hazır metinle açılmaktadır.")}
                 </p>
                 <WhatsAppForm />
               </div>
