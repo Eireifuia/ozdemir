@@ -36,7 +36,7 @@ export default function KitchenGallery({ photos }: { photos: KitchenPhoto[] }) {
             />
             {photo.caption && (
               <figcaption className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-ink/70 to-transparent text-cream text-xs md:text-sm p-3 pt-8 md:p-4 md:pt-8">
-                {photo.caption}
+                {t(photo.caption)}
               </figcaption>
             )}
           </figure>

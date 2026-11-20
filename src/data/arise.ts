@@ -75,6 +75,22 @@ export const ariseSquad: AriseCloseContact[] = [
     name: 'Oğuz Arslan',
     note: "yakın arkadaşı; Ufuk Arslan'ın ikiz kardeşi.",
   },
+  {
+    name: 'Prof. Dr. Yeliz Güven',
+    note: "Ömer'in biricik hocası, onu yetiştiren kişi. Ömer için hem hoca, hem abla, hem de anne gibidir; hayatındaki en önemli insanlardan biridir.",
+  },
+  {
+    name: 'Burak Saygın',
+    note: "Ömer'in dostu, neredeyse yaşıtı ve en yakın arkadaşlarından biri. Protez uzmanı, Ayşenur'un küçüğü. Aynı yerde çalışırlar.",
+  },
+  {
+    name: 'Serdar Ekici',
+    note: "Ömer'in patronu ve manevi ağabeyi; meslek erbabı olarak görür, ondan öğreneceği çok şey vardır. Ömer ona 'Serdar Kral' der. Sümeyye Ekici ile evli, 2 kızı var.",
+  },
+  {
+    name: 'Sümeyye Ekici',
+    note: 'Diş hekimi; Serdar Ekici ile evli.',
+  },
 ];
 
 export const ariseSiblings: AriseCloseContact[] = [

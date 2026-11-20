@@ -323,7 +323,7 @@ const Navbar = () => {
               {t("Yapay zeka asistanı")}
             </span>
             <span className="block text-sm text-ink leading-snug">
-              {t("Merhaba, ben Arise. Çocuğunuzun diş sağlığıyla ilgili sorularınızı yanıtlayabilirim.")}
+              {t("Merhaba, ben Arise. Ömer Özdemir'in yapay zeka asistanıyım, diş sağlığıyla ilgili sorularınızı yanıtlayabilirim.")}
             </span>
           </button>
         </div>

@@ -1,5 +1,6 @@
 import { treatments } from '@/data/treatments';
 import { generalFaq } from '@/data/generalFaq';
+import { buildTdbPriceText } from '@/data/tdbTarife';
 
 /**
  * Arise'ın bilgi tabanı. Tedavi sayfalarından otomatik üretilir, böylece sitede bir metin
@@ -16,5 +17,5 @@ export function buildAriseKnowledge(): string {
 
   const generalText = generalFaq.map((f) => `S: ${f.q}\nC: ${f.a}`).join('\n');
 
-  return `GENEL SORULAR (klinik ve randevu):\n${generalText}\n\nTEDAVİ BİLGİLERİ (sitedeki sayfalardan):\n${treatmentText}`;
+  return `GENEL SORULAR (klinik ve randevu):\n${generalText}\n\nTEDAVİ BİLGİLERİ (sitedeki sayfalardan):\n${treatmentText}\n\n${buildTdbPriceText()}`;
 }
